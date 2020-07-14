@@ -9,6 +9,8 @@ int main(int argc, char **argv)
     CPU cpu;
     cpu_init(&cpu);
 
+    init_display();
+
     // loading ROM
     FILE *rom = fopen(argv[1], "r");
     if (rom == NULL)
@@ -17,6 +19,15 @@ int main(int argc, char **argv)
     }
 
     load_rom(&cpu, rom);
+
+    for(;;)
+    {
+        process_cycle(&cpu);
+
+        // update display
+
+        // set keys                
+    }
 
     return 0;
 }

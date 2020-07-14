@@ -15,6 +15,17 @@ void cpu_init(CPU *cpu)
 }
 
 /*
+    summary:    Emulates a single CPU clock cycle
+
+    cpu:        Pointer to CPU
+*/
+void process_cycle(CPU *cpu)
+{
+    Opcode instruction = get_next_instruction(cpu);
+    perform_instruction(cpu, instruction);
+}
+
+/*
     summary:    Gets the next instruction
 
     cpu:        Pointer to CPU
@@ -201,6 +212,10 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                     // TODO  
                     break;       
             }
+            break;    
+
+        default:
+            err_msg(BAD_INSTRUCTION);
             break;    
     }    
 }

@@ -19,6 +19,12 @@ void err_msg(Error errCode)
             break;
         case BAD_ROM:
             msg = "Bad ROM File";
+            break; 
+        case BAD_INSTRUCTION:
+            msg = "Unknown OPCODE Instruction";
+            break;       
+        case GRAPHICS_INIT_ERROR:
+            msg = "Could not create SDL2 Window";
             break;    
         default:
             msg = "Unknown Error Code";

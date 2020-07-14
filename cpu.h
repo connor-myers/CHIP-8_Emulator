@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdint.h>
 #include "stack.h"
+#include "errs.h"
 
 #define MEMORY_SIZE 4096
 #define NUM_REGISTERS 16
@@ -21,7 +22,9 @@ typedef struct CPU {
 } CPU;
 
 void cpu_init(CPU *cpu);
+void process_cycle(CPU *cpu);
 Opcode get_next_instruction(CPU *cpu);
+void perform_instruction(CPU *cpu, Opcode instruction);
 void load_font_data(CPU *cpu);
 void load_rom(CPU *cpu, FILE *file);
 

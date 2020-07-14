@@ -1,9 +1,9 @@
-OPTS =	-Wall -pedantic -g -std=gnu99
+OPTS =	-Wall -pedantic -g -w -std=gnu99
 
 all: chip8 clean
 
-chip8:	main.o cpu.o errs.o stack.o
-	gcc $(OPTS) -o chip8 main.o cpu.o errs.o stack.o
+chip8:	main.o cpu.o errs.o stack.o display.o
+	gcc $(OPTS) -o chip8 main.o cpu.o errs.o stack.o display.o -lSDL2
 
 main.o:
 	gcc $(OPTS) -c main.c
@@ -16,6 +16,9 @@ errs.o:
 
 stack.o:
 	gcc $(OPTS) -c stack.c
+
+display.o:
+	gcc $(OPTS) -c display.c
 
 clean:
 	rm -f *.o *~ 	
