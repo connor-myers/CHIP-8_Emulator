@@ -19,9 +19,9 @@ void cpu_init(CPU *cpu)
 
     cpu:        Pointer to CPU
 */
-int16_t get_next_instruction(CPU *cpu)
+Opcode get_next_instruction(CPU *cpu)
 {
-    int16_t instruction = cpu->memory[cpu->pc] << 8 | cpu->memory[cpu->pc + 1];    
+    Opcode instruction = cpu->memory[cpu->pc] << 8 | cpu->memory[cpu->pc + 1];    
     cpu->pc += 2;           // each instruction takes 2 cells of memory, hence +2 
     return instruction;
 }
@@ -42,6 +42,167 @@ void load_rom(CPU *cpu, FILE *file)
         cpu->memory[0x200 + n] = (char) c;
         n++;
     }
+}
+
+void perform_instruction(CPU *cpu, Opcode instruction)
+{
+    switch (instruction & 0xF000) 
+    {
+        case 0x0000:
+            switch (instruction)
+            {
+                case 0x00E0:
+                    // TODO
+                    // clear screen
+                    break;
+                case 0x00EE:
+                    // TODO
+                    // return from subroutine
+                    break;    
+            }
+            break;
+
+        case 0x1000:
+            // Jumps to address NNN.
+            cpu->pc = (instruction & 0x0FFF);
+            break;
+
+        case 0x2000:
+            // TODO
+            // Calls subroutine at NNN.
+            break;    
+
+        case 0x3000:
+            // TODO
+            // Skip next instruction if Vx == NN (0x3XNN)
+            break;
+
+        case 0x4000:
+            // TODO
+            // Skip next instruction if Vx != NN (0x3XNN)
+            break;
+
+        case 0x5000:
+            // TODO
+            // SKip next instruction if Vx == Vy (0x5XY0)
+            break;
+
+        case 0x6000:
+            // TODO 
+            // Sets Vx to NN (0x6XNN)
+            break;                   
+
+        case 0x7000:
+            // TODO
+            break; 
+
+        case 0x8000:
+            switch (instruction & 0x000F)
+            {
+                case 0x0:
+                    // TODO
+                    break;
+                case 0x1:
+                    // TODO
+                    break;    
+                case 0x2:
+                    // TODO
+                    break;
+                case 0x3:
+                    // TODO
+                    break;  
+                case 0x4:
+                    // TODO
+                    break;
+                case 0x5:
+                    // TODO
+                    break;
+                case 0x6:
+                    // TODO
+                    break;
+                case 0x7:
+                    // TODO
+                    break;  
+                case 0xE:
+                    // TODO
+                    break;            
+            }
+            break;    
+
+        case 0x9000:
+            // TODO
+            break; 
+
+        case 0xA000:
+            // TODO
+            break; 
+
+        case 0xB000:
+            // TODO
+            break; 
+
+        case 0xC000:
+            // TODO
+            break; 
+
+        case 0xD000:
+            // TODO
+            break; 
+
+        case 0xE000:
+            switch (instruction & 0x00FF)
+            {
+                case 0x009E:
+                    // TODO
+                    break;
+
+                case 0x00A1:
+                    // TODO
+                    break;    
+            }
+            break;
+
+        case 0xF000:
+            switch (instruction & 0x00FF)
+            {
+                case 0x07:
+                    // TODO
+                    break;
+
+                case 0x0A:
+                    // TODO
+                    break; 
+
+                case 0x15:
+                    // TODO
+                    break; 
+
+                case 0x18:
+                    // TODO
+                    break;
+
+                case 0x1E:
+                    // TODO
+                    break; 
+
+                case 0x29:
+                    // TODO
+                    break; 
+
+                case 0x33:
+                    // TODO
+                    break;
+
+                case 0x55:
+                    // TODO
+                    break; 
+
+                case 0x65:
+                    // TODO  
+                    break;       
+            }
+            break;    
+    }    
 }
 
 /*
