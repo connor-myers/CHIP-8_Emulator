@@ -6,5 +6,8 @@ int main(int argc, char **argv)
         err_msg(BAD_ARGS);
     }
 
+    CPU cpu;
+    cpu_init(&cpu);    
+
     return 0;
 }
