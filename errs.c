@@ -17,6 +17,9 @@ void err_msg(Error errCode)
         case BAD_ARGS:
             msg = "Invalid number of arguments";
             break;
+        case BAD_ROM:
+            msg = "Bad ROM File";
+            break;    
         default:
             msg = "Unknown Error Code";
     }    

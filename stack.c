@@ -5,7 +5,7 @@ void stack_init(Stack *stack)
 {
     stack->capacity = STACK_CAPACITY;
     stack->size = 0;
-    stack->entries = calloc(stack->capacity, sizeof(unsigned short));
+    memset(stack->entries, 0, STACK_CAPACITY * sizeof(unsigned short));
 }
 
 void stack_push(Stack *stack, unsigned short entry)
@@ -16,5 +16,6 @@ void stack_push(Stack *stack, unsigned short entry)
 
 unsigned short stack_pop(Stack *stack)
 {
-    return stack->entries[--stack->size];
+    return stack->entries[stack->size];
+    stack->size--;
 }

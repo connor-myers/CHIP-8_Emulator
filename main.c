@@ -7,7 +7,18 @@ int main(int argc, char **argv)
     }
 
     CPU cpu;
-    cpu_init(&cpu);    
+    cpu_init(&cpu);
+
+    // loading ROM
+    FILE *rom = fopen(argv[1], "r");
+    if (rom == NULL)
+    {
+        err_msg(BAD_ROM);
+    }
+
+    load_rom(&cpu, rom);
+
+    
 
     return 0;
 }

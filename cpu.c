@@ -9,14 +9,32 @@ void cpu_init(CPU *cpu)
 {
     memset(cpu->memory, 0, MEMORY_SIZE * sizeof(unsigned int));
     memset(cpu->registers, 0, NUM_REGISTERS * sizeof(unsigned int));
-    stack_init(cpu->stack);
+    stack_init(&cpu->stack);
     load_font_data(cpu);
+}
+
+/*
+    summary:    Loads ROM into memory
+
+    cpu:        Pointer to CPU
+
+    file:       The file to load data from
+*/
+void load_rom(CPU *cpu, FILE *file)
+{
+    int n = 0;
+    int c;
+    while (c = fgetc(file), c != EOF)
+    {
+        cpu->memory[0x200 + n] = (char) c;
+        n++;
+    }
 }
 
 /*
     summary:    Loads the font data into memory
 
-    cpu:        Pointer to an empty CPU struct
+    cpu:        Pointer to CPU
 */
 void load_font_data(CPU *cpu)
 {
