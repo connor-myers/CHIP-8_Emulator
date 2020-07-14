@@ -18,7 +18,5 @@ int main(int argc, char **argv)
 
     load_rom(&cpu, rom);
 
-    
-
     return 0;
 }

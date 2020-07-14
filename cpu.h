@@ -3,18 +3,23 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 #include "stack.h"
 
 #define MEMORY_SIZE 4096
 #define NUM_REGISTERS 16
+#define PROGRAM_START 0x200         // the address program execution begins at
 
 typedef struct CPU {
     unsigned int memory[MEMORY_SIZE];
     unsigned int registers[NUM_REGISTERS];
-    Stack stack;    
+    Stack stack;
+    int16_t pc;                                 // program counter
+
 } CPU;
 
 void cpu_init(CPU *cpu);
+int16_t get_next_instruction(CPU *cpu);
 void load_font_data(CPU *cpu);
 void load_rom(CPU *cpu, FILE *file);
 

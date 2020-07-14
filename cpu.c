@@ -11,6 +11,19 @@ void cpu_init(CPU *cpu)
     memset(cpu->registers, 0, NUM_REGISTERS * sizeof(unsigned int));
     stack_init(&cpu->stack);
     load_font_data(cpu);
+    cpu->pc = PROGRAM_START; 
+}
+
+/*
+    summary:    Gets the next instruction
+
+    cpu:        Pointer to CPU
+*/
+int16_t get_next_instruction(CPU *cpu)
+{
+    int16_t instruction = cpu->memory[cpu->pc] << 8 | cpu->memory[cpu->pc + 1];    
+    cpu->pc += 2;           // each instruction takes 2 cells of memory, hence +2 
+    return instruction;
 }
 
 /*
