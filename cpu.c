@@ -7,11 +7,17 @@
 */
 void cpu_init(CPU *cpu)
 {
-    memset(cpu->memory, 0, MEMORY_SIZE * sizeof(unsigned int));
-    memset(cpu->registers, 0, NUM_REGISTERS * sizeof(unsigned int));
+    memset(cpu->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
+    memset(cpu->registers, 0, NUM_REGISTERS * sizeof(uint8_t));
     stack_init(&cpu->stack);
     load_font_data(cpu);
-    cpu->pc = PROGRAM_START; 
+    cpu->pc = PROGRAM_START;
+
+    for (int i = 0; i < DISPLAY_HEIGHT; i++)
+    {
+        memset(cpu->display[i], 0, DISPLAY_WIDTH * sizeof(uint8_t));
+    } 
+    memset(cpu->display, 0, DISPLAY_HEIGHT * sizeof(uint8_t));
 }
 
 /*

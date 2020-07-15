@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "stack.h"
 #include "errs.h"
+#include "display.h"
 
 #define MEMORY_SIZE 4096
 #define NUM_REGISTERS 16
@@ -14,11 +15,11 @@
 typedef unsigned short Opcode;
 
 typedef struct CPU {
-    unsigned int memory[MEMORY_SIZE];
-    unsigned int registers[NUM_REGISTERS];
-    Stack stack;
-    int16_t pc;                                 // program counter
-
+    uint8_t memory[MEMORY_SIZE];                                   // CHIP-8 Memory
+    uint8_t registers[NUM_REGISTERS];                              // CHIP-8 Registers
+    Stack stack;                                                   // program stack
+    int16_t pc;                                                    // program counter
+    uint8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH];                // the graphical display
 } CPU;
 
 void cpu_init(CPU *cpu);

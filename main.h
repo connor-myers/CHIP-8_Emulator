@@ -4,6 +4,7 @@
 /* includes */
 
 #include <stdio.h>
+#include "display.h"
 #include "cpu.h"
 #include "errs.h"
 #include "stack.h"

@@ -9,7 +9,10 @@ int main(int argc, char **argv)
     CPU cpu;
     cpu_init(&cpu);
 
-    init_display();
+    SDL_Window *window;
+    init_display(&window);
+
+    update_display(window, cpu.display);
 
     // loading ROM
     FILE *rom = fopen(argv[1], "r");
@@ -20,11 +23,20 @@ int main(int argc, char **argv)
 
     load_rom(&cpu, rom);
 
+
+    SDL_Delay(1000);
+
+    SDL_DestroyWindow( window );
+
+    //Quit SDL subsystems
+    SDL_Quit();
+
     for(;;)
     {
         process_cycle(&cpu);
 
         // update display
+        update_display(window, cpu.display);
 
         // set keys                
     }
