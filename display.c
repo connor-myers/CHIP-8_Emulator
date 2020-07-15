@@ -36,15 +36,33 @@ void init_display(SDL_Window **window)
 
     window:     Pointer to main SDL_Window   
 
+    Note:       We have a triple nested for-loop because I'm storing the information of 64 pixels in 8 bytes
+                Which means we need to bitshift out each bit value. More complicated, but it's more efficient
+                to do this. (C does not have a datatype that is 1 bit long, so this is the best we can do)
 */
 void update_display(SDL_Window *window, u_int8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH])
 {
     SDL_Renderer *renderer = SDL_GetRenderer(window);
-    SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // the rect color (solid red)
-    SDL_Rect rect = {50, 50, 50, 50};
-    SDL_RenderFillRect(renderer, &rect);
-    SDL_RenderPresent(renderer); // copy to screen
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // the rect color (solid white)
+
+    for (int i = 0; i < DISPLAY_HEIGHT; i++)
+    {
+        for (int j = 0; j < DISPLAY_WIDTH; j++)
+        {
+            for (int k = 7; k >= 0; k--)
+            {
+                int val = display[i][j] >> k & 1;
+                if (val)
+                {
+                    SDL_Rect rect = {((j * 8) + 7 - k) * SCALE_FACTOR, i * SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR};
+                    SDL_RenderFillRect(renderer, &rect);
+                }
+            }
+        }
+    }
+
+    SDL_RenderPresent(renderer); // display to screen
+
     return;
 }
 

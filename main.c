@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     load_rom(&cpu, rom);
 
 
-    SDL_Delay(1000);
+    SDL_Delay(5000);
 
     SDL_DestroyWindow( window );
 
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         process_cycle(&cpu);
 
         // update display
-        update_display(window, cpu.display);
+        //update_display(window, cpu.display);
 
         // set keys                
     }

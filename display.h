@@ -6,7 +6,7 @@
 
 #define SCREEN_HEIGHT 32
 #define SCREEN_WIDTH 64
-#define SCALE_FACTOR 10
+#define SCALE_FACTOR 25
 
 #define DISPLAY_HEIGHT 32
 #define DISPLAY_WIDTH 8
