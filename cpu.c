@@ -70,6 +70,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             {
                 case 0x00E0:
                     // TODO
+                    printf("bruh!\n");
                     // clear screen
                     break;
                 case 0x00EE:

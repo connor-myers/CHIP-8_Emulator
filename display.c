@@ -45,6 +45,20 @@ void update_display(SDL_Window *window, u_int8_t display[DISPLAY_HEIGHT][DISPLAY
     SDL_Renderer *renderer = SDL_GetRenderer(window);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // the rect color (solid white)
 
+        // testing display
+    display[0][0] = 0xFF;
+    display[1][0] = 0x80;
+    display[2][0] = 0xF0;
+    display[3][0] = 0x90;
+    display[4][0] = 0xF0;
+
+    display[0][1] = 0xF0;
+    display[1][1] = 0x90;
+    display[2][1] = 0xF0;
+    display[3][1] = 0x10;
+    display[4][1] = 0xF0;
+
+
     for (int i = 0; i < DISPLAY_HEIGHT; i++)
     {
         for (int j = 0; j < DISPLAY_WIDTH; j++)
