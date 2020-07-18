@@ -69,68 +69,93 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             switch (instruction)
             {
                 case 0x00E0:
-                    // TODO
-                    printf("bruh!\n");
-                    // clear screen
+                    // Clear the display
+                    clear_display(cpu);
                     break;
                 case 0x00EE:
-                    // TODO
-                    // return from subroutine
+                    // Return from subroutine
+                    cpu->pc = stack_pop(cpu->stack);
                     break;    
             }
             break;
 
         case 0x1000:
-            // Jumps to address NNN.
-            cpu->pc = (instruction & 0x0FFF);
+            // Jump to location nnn.
+            cpu->pc = instruction & 0x0FFF;
             break;
 
         case 0x2000:
-            // TODO
-            // Calls subroutine at NNN.
+            // Call subroutine at nnn.
+            stack_push(cpu->stack, cpu->pc);
+            cpu->pc = instruction & 0x0FFF;
             break;    
 
         case 0x3000:
-            // TODO
             // Skip next instruction if Vx == NN (0x3XNN)
+            uint8_t x = cpu->registers[instruction & 0x0F00];
+            uint8_t kk = instruction & 0x00FF;
+            if (x == kk)
+            {
+                cpu->pc += 2;
+            }
             break;
 
         case 0x4000:
-            // TODO
             // Skip next instruction if Vx != NN (0x3XNN)
+            uint8_t x = cpu->registers[instruction & 0x0F00];
+            uint8_t kk = instruction & 0x00FF;
+            if (x != kk)
+            {
+                cpu->pc += 2;
+            }
             break;
 
         case 0x5000:
-            // TODO
             // SKip next instruction if Vx == Vy (0x5XY0)
+            uint8_t x = cpu->registers[instruction & 0x0F00];
+            uint8_t y = cpu->registers[instruction & 0x00F0];
+            if (x == y) {
+                cpu->pc += 2;
+            }
             break;
 
         case 0x6000:
-            // TODO 
             // Sets Vx to NN (0x6XNN)
+            uint8_t kk = instruction & 0x00FF;
+            uint8_t x = instruction & 0x0F00;
+            cpu->registers[x] = kk;
             break;                   
 
         case 0x7000:
-            // TODO
+            uint8_t kk = instruction & 0x00FF;
+            uint8_t x = instruction & 0x0F00;
+            cpu->registers[x] += kk;
             break; 
 
         case 0x8000:
+            uint8_t x = instruction & 0x0F00;
+            uint8_t y = instruction & 0x00F0;
             switch (instruction & 0x000F)
             {
                 case 0x0:
-                    // TODO
+                    cpu->registers[x] = cpu->registers[y];
                     break;
                 case 0x1:
-                    // TODO
+                    cpu->registers[x] = cpu->registers[x] | cpu->registers[y];
                     break;    
                 case 0x2:
-                    // TODO
+                    cpu->registers[x] = cpu->registers[x] & cpu->registers[y];
                     break;
                 case 0x3:
-                    // TODO
+                    cpu->registers[x] = cpu->registers[x] ^ cpu->registers[y];
                     break;  
                 case 0x4:
-                    // TODO
+                    unsigned short result = cpu->registers[x] + cpu->registers[y];
+                    if (result > 255)
+                    {
+                        cpu->registers[0xF] = 1;
+                    }
+                    cpu->registers[x] = result & 0xFF;
                     break;
                 case 0x5:
                     // TODO

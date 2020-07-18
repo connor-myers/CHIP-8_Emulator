@@ -13,5 +13,6 @@
 
 void init_display(SDL_Window **window);
 void update_display(SDL_Window *window, u_int8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH]);
+void clear_display(CPU *cpu);
 
 #endif

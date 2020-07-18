@@ -9,10 +9,10 @@ int main(int argc, char **argv)
     CPU cpu;
     cpu_init(&cpu);
 
-    // SDL_Window *window;
-    // init_display(&window);
+    SDL_Window *window;
+    init_display(&window);
 
-    //update_display(window, cpu.display);
+    update_display(window, cpu.display);
 
     // loading ROM
     FILE *rom = fopen(argv[1], "r");
@@ -24,12 +24,12 @@ int main(int argc, char **argv)
     load_rom(&cpu, rom);
 
 
-    // SDL_Delay(5000);
+    SDL_Delay(5000);
 
-    // SDL_DestroyWindow( window );
+    SDL_DestroyWindow( window );
 
-    // //Quit SDL subsystems
-    // SDL_Quit();
+    //Quit SDL subsystems
+    SDL_Quit();
 
     for(;;)
     {

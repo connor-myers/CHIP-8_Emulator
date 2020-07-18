@@ -89,3 +89,17 @@ void close_display(SDL_Window *window)
 {
     return;
 }
+
+/*
+    summary:    Clears the display
+
+    cpu:        The main CPU Struct
+*/
+void clear_display(CPU *cpu)
+{
+    memset(cpu->display, 0, DISPLAY_HEIGHT);
+    for (int i = 0; i < DISPLAY_HEIGHT; i++)
+    {
+        memset(cpu->display[i], 0, DISPLAY_WIDTH);
+    }
+}
