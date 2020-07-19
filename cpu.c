@@ -7,13 +7,14 @@
 */
 void cpu_init(CPU *cpu)
 {
+    srand(time(NULL)); // setting seed for random number generation
     memset(cpu->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
     memset(cpu->registers, 0, NUM_REGISTERS * sizeof(uint8_t));
     stack_init(&cpu->stack);
     load_font_data(cpu);
     cpu->pc = PROGRAM_START;
     cpu->i = 0;
-
+    cpu->drawFlag = 0;
     for (int i = 0; i < DISPLAY_HEIGHT; i++)
     {
         memset(cpu->display[i], 0, DISPLAY_WIDTH * sizeof(uint8_t));
@@ -243,13 +244,34 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
         case 0xC000:
         {
-            
+            uint8_t random = rand() % 256;
+            cpu->registers[instruction & 0x0F00] = random & (instruction & 0x00FF);
         }
         break; 
 
+        // this probably doesn't work
         case 0xD000:
-            // TODO
-            break; 
+        {
+            // Engage big-brain mode to understand this opcode
+            uint8_t n = instruction & 0x000F;
+            uint8_t x = cpu->registers[instruction & 0x0F00];
+            uint8_t y = cpu->registers[instruction & 0x00F0];
+            cpu->registers[0xF] = NO_COLLISION;
+            for (int i = 0; i < n; i++)
+            {
+                uint8_t spritePart = cpu->memory[cpu->i + i];
+                uint8_t copy = cpu->display[y + i];
+                cpu->display[y + i] ^= spritePart;
+                /*
+                    We are checking to see if any collisions happened. I.e. a pixel got erased due to XOR
+                    We do this by ORing the original value for the display with the new sprite.
+                    If the new display value (XORd) is less than the same thing ORd there must have been a collision.
+                */
+                cpu->registers[0xF] = cpu->display[y + i] < (copy | spritePart) ? COLLISION : cpu->registers[0xF];
+            }                        
+            cpu->drawFlag = 1;
+        }
+        break; 
 
         case 0xE000:
             switch (instruction & 0x00FF)

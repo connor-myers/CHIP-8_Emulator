@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <time.h>
 #include "stack.h"
 #include "errs.h"
 #include "display.h"
@@ -11,8 +13,11 @@
 #define MEMORY_SIZE 4096
 #define NUM_REGISTERS 16
 #define PROGRAM_START 0x200         // the address program execution begins at
+#define COLLISION = 1
+#define NO_COLLISION = 0
 
 typedef unsigned short Opcode;
+
 
 typedef struct CPU {
     uint8_t memory[MEMORY_SIZE];                                   // CHIP-8 Memory
@@ -21,6 +26,7 @@ typedef struct CPU {
     int16_t pc;                                                    // program counter
     uint8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH];                // the graphical display
     uint16_t i;                                                    // I register
+    uint8_t drawFlag;                                              // Draw flag
 } CPU;
 
 void cpu_init(CPU *cpu);
