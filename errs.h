@@ -9,7 +9,8 @@ typedef enum Error {
     BAD_ARGS = 1,
     BAD_ROM = 2,
     BAD_INSTRUCTION = 3,
-    GRAPHICS_INIT_ERROR = 4
+    GRAPHICS_INIT_ERROR = 4,
+    UNKNOWN_FONT_DATA = 5
 } Error;
 
 void err_msg(Error errCode);

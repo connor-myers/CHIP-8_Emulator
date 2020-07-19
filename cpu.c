@@ -75,7 +75,7 @@ void load_rom(CPU *cpu, FILE *file)
 void update_timers(CPU *cpu)
 {
     time_t currentTime = clock() / (CLOCKS_PER_SEC / 1000);
-    
+
     while (currentTime - cpu->lastCycleTime > PERIOD) {
         if (cpu->delayTimer > 0)
         {
@@ -304,66 +304,166 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             switch (instruction & 0x00FF)
             {
                 case 0x009E:
+                {
                     if (cpu->keyboard[cpu->registers[instruction & 0x0F00]])
                     {
                         cpu->pc += 2;
                     }
-                    break;
+                }
+                break;
 
                 case 0x00A1:
+                {
                     if (cpu->keyboard[cpu->registers[instruction & 0x0F00]] == 0)
                     {
                         cpu->pc += 2;
                     }
-                    break;    
+                }
+                break;
+                        
             }
             break;
 
         case 0xF000:
+        {
+            uint8_t x = instruction & 0x0F00;
             switch (instruction & 0x00FF)
             {
                 case 0x07:
-                    // TODO
-                    break;
+                {
+                    cpu->registers[x] = cpu->delayTimer;
+                }
+                break;
 
                 case 0x0A:
-                    // TODO
-                    break; 
+                {
+                    // TODO 
+                    // ? COME BACK TO LATER
+                }
+                break; 
 
                 case 0x15:
-                    // TODO
-                    break; 
+                {
+                    cpu->delayTimer = cpu->registers[x];
+                }
+                break; 
 
                 case 0x18:
-                    // TODO
-                    break;
+                {
+                    cpu->soundTimer = cpu->registers[x];                                        
+                }
+                break;
 
                 case 0x1E:
-                    // TODO
-                    break; 
+                {
+                    cpu->i += cpu->registers[x];                    
+                }
+                break; 
 
                 case 0x29:
-                    // TODO
-                    break; 
+                {
+                    cpu->i = get_font_address(cpu->registers[x]);                                                            
+                }
+                break; 
 
                 case 0x33:
-                    // TODO
-                    break;
+                {
+                    cpu->memory[cpu->i] = get_font_address(cpu->registers[x] / 100);       
+                    cpu->memory[cpu->i + 1] = get_font_address((cpu->registers[x] % 100) / 10);    
+                    cpu->memory[cpu->i + 2] = get_font_address((cpu->registers[x] % 10));                                               
+                }
+                break;
 
                 case 0x55:
-                    // TODO
-                    break; 
+                {
+                    for (int i = 0; i < x; i++)
+                    {
+                        cpu->memory[cpu->i + i] = cpu->registers[i];
+                    }
+                }
+                break; 
 
                 case 0x65:
-                    // TODO  
-                    break;       
+                {
+                    for (int i = 0; i < x; i++)
+                    {
+                        cpu->registers[i] = cpu->memory[cpu->i + i];
+                    }
+                }
+                break;       
             }
-            break;    
+        }
+        break;    
 
         default:
             err_msg(BAD_INSTRUCTION);
             break;    
     }    
+}
+
+/*
+    summary:    Gets the location in memory for font for the corresponding hex digit
+
+    value:      The hex digit to get location in memory for the font for
+*/
+uint8_t get_font_address(uint8_t value)
+{
+    uint8_t location;
+    switch (value)
+    {
+        case 0x0:
+            location = 0x000;
+            break;
+        case 0x1:
+            location = 0x005;
+            break;
+        case 0x2:
+            location = 0x00A;
+            break;
+        case 0x3:
+            location = 0x00F;
+            break;
+        case 0x4:
+            location = 0x014;
+            break;
+        case 0x5:
+            location = 0x019;
+            break;
+        case 0x6:
+            location = 0x01E;
+            break;
+        case 0x7:
+            location = 0x023;
+            break;
+        case 0x8:
+            location = 0x028;
+            break;
+        case 0x9:
+            location = 0x02D;
+            break;
+        case 0xA:
+            location = 0x032;
+            break;
+        case 0xB:
+            location = 0x037;
+            break;
+        case 0xC:
+            location = 0x03C;
+            break;
+        case 0xD:
+            location = 0x041;
+            break;
+        case 0xE:
+            location = 0x046;
+            break;
+        case 0xF:
+            location = 0x04B;
+            break;   
+        default:
+            err_msg(UNKNOWN_FONT_DATA);
+            break;                                                      
+    }
+    return location;
 }
 
 /*
@@ -430,58 +530,58 @@ void load_font_data(CPU *cpu)
     cpu->memory[0x027] = 0x40;
 
     // 8
-    cpu->memory[0x023] = 0xF0;
-    cpu->memory[0x024] = 0x90;
-    cpu->memory[0x025] = 0xF0;
-    cpu->memory[0x026] = 0x90;
-    cpu->memory[0x027] = 0x90;
-
-    // 9
     cpu->memory[0x028] = 0xF0;
     cpu->memory[0x029] = 0x90;
     cpu->memory[0x02A] = 0xF0;
-    cpu->memory[0x02B] = 0x10;
-    cpu->memory[0x02C] = 0xF0;
+    cpu->memory[0x02B] = 0x90;
+    cpu->memory[0x02C] = 0x90;
 
-    // A
+    // 9
     cpu->memory[0x02D] = 0xF0;
     cpu->memory[0x02E] = 0x90;
     cpu->memory[0x02F] = 0xF0;
-    cpu->memory[0x030] = 0x90;
-    cpu->memory[0x031] = 0x90;
+    cpu->memory[0x030] = 0x10;
+    cpu->memory[0x031] = 0xF0;
+
+    // A
+    cpu->memory[0x032] = 0xF0;
+    cpu->memory[0x033] = 0x90;
+    cpu->memory[0x034] = 0xF0;
+    cpu->memory[0x035] = 0x90;
+    cpu->memory[0x036] = 0x90;
 
     // B
-    cpu->memory[0x032] = 0xE0;
-    cpu->memory[0x033] = 0x90;
-    cpu->memory[0x034] = 0xE0;
-    cpu->memory[0x035] = 0x90;
-    cpu->memory[0x036] = 0xE0;
+    cpu->memory[0x037] = 0xE0;
+    cpu->memory[0x038] = 0x90;
+    cpu->memory[0x039] = 0xE0;
+    cpu->memory[0x03A] = 0x90;
+    cpu->memory[0x03B] = 0xE0;
 
     // C
-    cpu->memory[0x037] = 0xF0;
-    cpu->memory[0x038] = 0x80;
-    cpu->memory[0x039] = 0x80;
-    cpu->memory[0x03A] = 0x80;
-    cpu->memory[0x03B] = 0xF0;
+    cpu->memory[0x03C] = 0xF0;
+    cpu->memory[0x03D] = 0x80;
+    cpu->memory[0x03E] = 0x80;
+    cpu->memory[0x03F] = 0x80;
+    cpu->memory[0x040] = 0xF0;
 
     // D
-    cpu->memory[0x03C] = 0xE0;
-    cpu->memory[0x03D] = 0x90;
-    cpu->memory[0x03E] = 0x90;
-    cpu->memory[0x03F] = 0x90;
-    cpu->memory[0x040] = 0xE0;
+    cpu->memory[0x041] = 0xE0;
+    cpu->memory[0x042] = 0x90;
+    cpu->memory[0x043] = 0x90;
+    cpu->memory[0x044] = 0x90;
+    cpu->memory[0x045] = 0xE0;
 
     // E
-    cpu->memory[0x041] = 0xF0;
-    cpu->memory[0x042] = 0x80;
-    cpu->memory[0x043] = 0xF0;
-    cpu->memory[0x044] = 0x80;
-    cpu->memory[0x045] = 0xF0;
-
-    // F
     cpu->memory[0x046] = 0xF0;
     cpu->memory[0x047] = 0x80;
     cpu->memory[0x048] = 0xF0;
     cpu->memory[0x049] = 0x80;
-    cpu->memory[0x04A] = 0x80;
+    cpu->memory[0x04A] = 0xF0;
+
+    // F
+    cpu->memory[0x04B] = 0xF0;
+    cpu->memory[0x04C] = 0x80;
+    cpu->memory[0x04D] = 0xF0;
+    cpu->memory[0x04E] = 0x80;
+    cpu->memory[0x04F] = 0x80;
 }
