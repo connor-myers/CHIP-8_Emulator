@@ -12,6 +12,7 @@ void cpu_init(CPU *cpu)
     stack_init(&cpu->stack);
     load_font_data(cpu);
     cpu->pc = PROGRAM_START;
+    cpu->i = 0;
 
     for (int i = 0; i < DISPLAY_HEIGHT; i++)
     {
@@ -189,45 +190,62 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 }
                 case 0x5:
                 {
-                    // TODO
+                    if(x > y)
+                    {
+                        cpu->registers[0xF] = 1;
+                    }
+                    cpu->registers[x] -= cpu->registers[y];
                 }
                 break;
                 case 0x6:
                 {
-                    // TODO
-
+                    cpu->registers[0xF] = cpu->registers[x] & 1 == 1 ? 1 : 0
+                    cpu->registers[x] /= 2;
                 }
                 break;
                 case 0x7:
                 {
-                    // TODO
+                    cpu->registers[0xF] = cpu->registers[y] > cpu->registers[x] ? 1 : 0
+                    cpu->registers[x] = cpu->registers[y] - cpu->registers[x];
                 }
                     break;  
                 case 0xE:
                 {
-                    // TODO
+                    cpu->registers[0xF] = cpu->registers[x] & 0x80 == 1 ? 1 : 0
+                    cpu->registers[x] *= 2;
                 }
                     break;            
             }
             break; 
         }
-               
 
         case 0x9000:
-            // TODO
-            break; 
+        {
+            uint8_t x = instruction & 0x0F00;
+            uint8_t y = instruction & 0x00F0;
+            if (cpu->registers[x] != cpu->registers[y]) {
+                cpu->pc += 2;
+            }            
+        }
+        break; 
 
         case 0xA000:
-            // TODO
-            break; 
+        {
+            cpu->i = instruction & 0x0FFF;       
+        }
+        break; 
 
         case 0xB000:
-            // TODO
-            break; 
+        {
+            cpu->pc = (instruction & 0x0FFF) + cpu->registers[0x0];
+        }
+        break; 
 
         case 0xC000:
-            // TODO
-            break; 
+        {
+            
+        }
+        break; 
 
         case 0xD000:
             // TODO

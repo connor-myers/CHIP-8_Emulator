@@ -20,6 +20,7 @@ typedef struct CPU {
     Stack stack;                                                   // program stack
     int16_t pc;                                                    // program counter
     uint8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH];                // the graphical display
+    uint16_t i;                                                    // I register
 } CPU;
 
 void cpu_init(CPU *cpu);
