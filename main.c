@@ -31,15 +31,15 @@ int main(int argc, char **argv)
     //Quit SDL subsystems
     SDL_Quit();
 
-    for(;;)
-    {
-        process_cycle(&cpu);
+    // for(;;)
+    // {
+    //     process_cycle(&cpu);
 
-        // update display
-        //update_display(window, cpu.display);
+    //     // update display
+    //     //update_display(window, cpu.display);
 
-        // set keys                
-    }
+    //     // set keys                
+    // }
 
     return 0;
 }

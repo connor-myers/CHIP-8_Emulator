@@ -40,38 +40,39 @@ void init_display(SDL_Window **window)
                 Which means we need to bitshift out each bit value. More complicated, but it's more efficient
                 to do this. (C does not have a datatype that is 1 bit long, so this is the best we can do)
 */
-void update_display(SDL_Window *window, u_int8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH])
+void update_display(SDL_Window *window, u_int8_t display[SCREEN_HEIGHT][SCREEN_WIDTH])
 {
     SDL_Renderer *renderer = SDL_GetRenderer(window);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // the rect color (solid white)
 
-        // testing display
-    display[0][0] = 0xFF;
-    display[1][0] = 0x80;
-    display[2][0] = 0xF0;
-    display[3][0] = 0x90;
-    display[4][0] = 0xF0;
+    // testing display
+    // display[0][0] = 1;
+    // display[0][1] = 1;
+    // display[0][2] = 1;
+    // display[0][3] = 1;
+    // display[0][4] = 1;
+    // display[0][5] = 1;
+    // display[0][6] = 1;
+    // display[0][7] = 1;
 
-    display[0][1] = 0xF0;
-    display[1][1] = 0x90;
-    display[2][1] = 0xF0;
-    display[3][1] = 0x10;
-    display[4][1] = 0xF0;
+    // display[0][0] = 1;
+    // display[1][0] = 1;
+    // display[2][0] = 1;
+    // display[3][0] = 1;
+    // display[4][0] = 1;
+    // display[5][0] = 1;
+    // display[6][0] = 1;
+    // display[7][0] = 1;
 
-
-    for (int i = 0; i < DISPLAY_HEIGHT; i++)
+    for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
-        for (int j = 0; j < DISPLAY_WIDTH; j++)
+        for (int j = 0; j < SCREEN_WIDTH; j++)
         {
-            for (int k = 7; k >= 0; k--)
-            {
-                int val = display[i][j] >> k & 1;
-                if (val)
-                {
-                    SDL_Rect rect = {((j * 8) + 7 - k) * SCALE_FACTOR, i * SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR};
-                    SDL_RenderFillRect(renderer, &rect);
-                }
+            if (display[i][j] == 1) {
+                SDL_Rect rect = {j * SCALE_FACTOR, i * SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR};
+                SDL_RenderFillRect(renderer, &rect);
             }
+            
         }
     }
 
@@ -95,11 +96,11 @@ void close_display(SDL_Window *window)
 
     cpu:        The main CPU Struct
 */
-void clear_display(uint8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH])
+void clear_display(uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH])
 {
-    memset(display, 0, DISPLAY_HEIGHT);
-    for (int i = 0; i < DISPLAY_HEIGHT; i++)
+    memset(display, 0, SCREEN_HEIGHT);
+    for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
-        memset(display[i], 0, DISPLAY_WIDTH);
+        memset(display[i], 0, SCREEN_WIDTH);
     }
 }

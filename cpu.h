@@ -24,7 +24,7 @@ typedef struct CPU {
     uint8_t registers[NUM_REGISTERS];                              // CHIP-8 Registers
     Stack stack;                                                   // program stack
     int16_t pc;                                                    // program counter
-    uint8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH];                // the graphical display
+    uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH];                // the graphical display
     uint16_t i;                                                    // I register
     uint8_t drawFlag;                                              // Draw flag
 } CPU;

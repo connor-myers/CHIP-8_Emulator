@@ -15,11 +15,11 @@ void cpu_init(CPU *cpu)
     cpu->pc = PROGRAM_START;
     cpu->i = 0;
     cpu->drawFlag = 0;
-    for (int i = 0; i < DISPLAY_HEIGHT; i++)
+    for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
-        memset(cpu->display[i], 0, DISPLAY_WIDTH * sizeof(uint8_t));
+        memset(cpu->display[i], 0, SCREEN_WIDTH * sizeof(uint8_t));
     } 
-    memset(cpu->display, 0, DISPLAY_HEIGHT * sizeof(uint8_t));
+    memset(cpu->display, 0, SCREEN_HEIGHT * sizeof(uint8_t));
 }
 
 /*
@@ -200,19 +200,19 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 break;
                 case 0x6:
                 {
-                    cpu->registers[0xF] = cpu->registers[x] & 1 == 1 ? 1 : 0
+                    cpu->registers[0xF] = cpu->registers[x] & 1 == 1 ? 1 : 0;
                     cpu->registers[x] /= 2;
                 }
                 break;
                 case 0x7:
                 {
-                    cpu->registers[0xF] = cpu->registers[y] > cpu->registers[x] ? 1 : 0
+                    cpu->registers[0xF] = cpu->registers[y] > cpu->registers[x] ? 1 : 0;
                     cpu->registers[x] = cpu->registers[y] - cpu->registers[x];
                 }
                     break;  
                 case 0xE:
                 {
-                    cpu->registers[0xF] = cpu->registers[x] & 0x80 == 1 ? 1 : 0
+                    cpu->registers[0xF] = cpu->registers[x] & 0x80 == 1 ? 1 : 0;
                     cpu->registers[x] *= 2;
                 }
                     break;            
@@ -261,7 +261,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 //cpu->display[cpu->registers[y] + i][cpu->registers[x] / 8]
                 for (int j = 7; j >= 0; j--)
                 {
-                    cpu->display[cpu->registers[y] + i][cpu->registers[x] / 8]
+                    cpu->display[cpu->registers[y] + i][cpu->registers[x] / 8];
+
 
                 }
 
