@@ -107,7 +107,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 case 0x00E0:
                 {
                     // Clear the display
-                    clear_display(cpu);
+                    clear_display(cpu->display);
                 }
                 break;
 
