@@ -69,28 +69,38 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             switch (instruction)
             {
                 case 0x00E0:
+                {
                     // Clear the display
                     clear_display(cpu);
-                    break;
+                }
+                break;
+
                 case 0x00EE:
+                {
                     // Return from subroutine
-                    cpu->pc = stack_pop(cpu->stack);
-                    break;    
+                    cpu->pc = stack_pop(&cpu->stack);
+                }
+                break;    
             }
             break;
 
         case 0x1000:
+        {
             // Jump to location nnn.
             cpu->pc = instruction & 0x0FFF;
-            break;
+        }
+        break;
 
         case 0x2000:
+        {
             // Call subroutine at nnn.
-            stack_push(cpu->stack, cpu->pc);
+            stack_push(&cpu->stack, cpu->pc);
             cpu->pc = instruction & 0x0FFF;
-            break;    
+        }
+        break;  
 
         case 0x3000:
+        {
             // Skip next instruction if Vx == NN (0x3XNN)
             uint8_t x = cpu->registers[instruction & 0x0F00];
             uint8_t kk = instruction & 0x00FF;
@@ -98,9 +108,11 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             {
                 cpu->pc += 2;
             }
-            break;
+        }
+        break;
 
         case 0x4000:
+        {
             // Skip next instruction if Vx != NN (0x3XNN)
             uint8_t x = cpu->registers[instruction & 0x0F00];
             uint8_t kk = instruction & 0x00FF;
@@ -108,48 +120,65 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             {
                 cpu->pc += 2;
             }
-            break;
+        }
+        break;
 
         case 0x5000:
+        {
             // SKip next instruction if Vx == Vy (0x5XY0)
             uint8_t x = cpu->registers[instruction & 0x0F00];
             uint8_t y = cpu->registers[instruction & 0x00F0];
             if (x == y) {
                 cpu->pc += 2;
             }
-            break;
-
+        }
+        break;
+            
         case 0x6000:
+        {
             // Sets Vx to NN (0x6XNN)
             uint8_t kk = instruction & 0x00FF;
             uint8_t x = instruction & 0x0F00;
-            cpu->registers[x] = kk;
-            break;                   
-
+            cpu->registers[x] = kk;               
+        }
+        break;
+            
         case 0x7000:
+        {
             uint8_t kk = instruction & 0x00FF;
             uint8_t x = instruction & 0x0F00;
             cpu->registers[x] += kk;
-            break; 
+        }
+        break;
 
         case 0x8000:
+        {
             uint8_t x = instruction & 0x0F00;
             uint8_t y = instruction & 0x00F0;
             switch (instruction & 0x000F)
             {
                 case 0x0:
+                {
                     cpu->registers[x] = cpu->registers[y];
-                    break;
+                }
+                break;
                 case 0x1:
+                {
                     cpu->registers[x] = cpu->registers[x] | cpu->registers[y];
-                    break;    
+                }
+                break;
                 case 0x2:
+                {
                     cpu->registers[x] = cpu->registers[x] & cpu->registers[y];
-                    break;
+                }
+                break;
                 case 0x3:
+                {
                     cpu->registers[x] = cpu->registers[x] ^ cpu->registers[y];
-                    break;  
+                }
+                break; 
                 case 0x4:
+                {
                     unsigned short result = cpu->registers[x] + cpu->registers[y];
                     if (result > 255)
                     {
@@ -157,20 +186,32 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                     }
                     cpu->registers[x] = result & 0xFF;
                     break;
+                }
                 case 0x5:
+                {
                     // TODO
-                    break;
+                }
+                break;
                 case 0x6:
+                {
                     // TODO
-                    break;
+
+                }
+                break;
                 case 0x7:
+                {
                     // TODO
+                }
                     break;  
                 case 0xE:
+                {
                     // TODO
+                }
                     break;            
             }
-            break;    
+            break; 
+        }
+               
 
         case 0x9000:
             // TODO

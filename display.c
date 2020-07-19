@@ -95,11 +95,11 @@ void close_display(SDL_Window *window)
 
     cpu:        The main CPU Struct
 */
-void clear_display(CPU *cpu)
+void clear_display(uint8_t display[DISPLAY_HEIGHT][DISPLAY_WIDTH])
 {
-    memset(cpu->display, 0, DISPLAY_HEIGHT);
+    memset(display, 0, DISPLAY_HEIGHT);
     for (int i = 0; i < DISPLAY_HEIGHT; i++)
     {
-        memset(cpu->display[i], 0, DISPLAY_WIDTH);
+        memset(display[i], 0, DISPLAY_WIDTH);
     }
 }
