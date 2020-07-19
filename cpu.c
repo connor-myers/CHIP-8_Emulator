@@ -252,24 +252,22 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         // this probably doesn't work
         case 0xD000:
         {
-            // Engage big-brain mode to understand this opcode
             uint8_t n = instruction & 0x000F;
-            uint8_t x = cpu->registers[instruction & 0x0F00];
-            uint8_t y = cpu->registers[instruction & 0x00F0];
-            cpu->registers[0xF] = NO_COLLISION;
+            uint8_t x = instruction & 0x0F00;
+            uint8_t y = instruction & 0x00F0;
             for (int i = 0; i < n; i++)
             {
-                uint8_t spritePart = cpu->memory[cpu->i + i];
-                uint8_t copy = cpu->display[y + i];
-                cpu->display[y + i] ^= spritePart;
-                /*
-                    We are checking to see if any collisions happened. I.e. a pixel got erased due to XOR
-                    We do this by ORing the original value for the display with the new sprite.
-                    If the new display value (XORd) is less than the same thing ORd there must have been a collision.
-                */
-                cpu->registers[0xF] = cpu->display[y + i] < (copy | spritePart) ? COLLISION : cpu->registers[0xF];
-            }                        
-            cpu->drawFlag = 1;
+                uint8_t sprite = cpu->memory[cpu->i + i];
+                //cpu->display[cpu->registers[y] + i][cpu->registers[x] / 8]
+                for (int j = 7; j >= 0; j--)
+                {
+                    cpu->display[cpu->registers[y] + i][cpu->registers[x] / 8]
+
+                }
+
+                // remember to set VF is there is a collision
+            }
+            
         }
         break; 
 
