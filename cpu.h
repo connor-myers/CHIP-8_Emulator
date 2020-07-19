@@ -13,8 +13,8 @@
 #define MEMORY_SIZE 4096
 #define NUM_REGISTERS 16
 #define PROGRAM_START 0x200         // the address program execution begins at
-#define COLLISION = 1
-#define NO_COLLISION = 0
+#define COLLISION 1
+#define NO_COLLISION 0
 
 typedef unsigned short Opcode;
 

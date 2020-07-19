@@ -253,20 +253,22 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0xD000:
         {
             uint8_t n = instruction & 0x000F;
-            uint8_t x = instruction & 0x0F00;
-            uint8_t y = instruction & 0x00F0;
+            uint8_t x = cpu->registers[instruction & 0x0F00];
+            uint8_t y = cpu->registers[instruction & 0x00F0];
+            cpu->registers[0xF] = NO_COLLISION;
             for (int i = 0; i < n; i++)
             {
                 uint8_t sprite = cpu->memory[cpu->i + i];
-                //cpu->display[cpu->registers[y] + i][cpu->registers[x] / 8]
-                for (int j = 7; j >= 0; j--)
+                // (sprite >> j) & 1;
+                for (int j = 0; j < 7; j++)
                 {
-                    cpu->display[cpu->registers[y] + i][cpu->registers[x] / 8];
-
-
+                    // if both are one, than they're going to cancel out in XOR; thus a collision
+                    if (cpu->display[(y + i) % SCREEN_HEIGHT][(x + j) % SCREEN_WIDTH] == 1 && (sprite >> j) & 1 == 1)
+                    {
+                        cpu->registers[0xF] = COLLISION;
+                    }
+                    cpu->display[(y + i) % SCREEN_HEIGHT][(x + j) % SCREEN_WIDTH] ^= (sprite >> j) & 1;            
                 }
-
-                // remember to set VF is there is a collision
             }
             
         }
