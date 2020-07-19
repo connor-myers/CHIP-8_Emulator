@@ -10,11 +10,15 @@ void cpu_init(CPU *cpu)
     srand(time(NULL)); // setting seed for random number generation
     memset(cpu->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
     memset(cpu->registers, 0, NUM_REGISTERS * sizeof(uint8_t));
+    memset(cpu->keyboard, 0, NUM_KEYS * sizeof(uint8_t));
     stack_init(&cpu->stack);
     load_font_data(cpu);
     cpu->pc = PROGRAM_START;
     cpu->i = 0;
     cpu->drawFlag = 0;
+    cpu->lastCycleTime = clock() / (CLOCKS_PER_SEC / 1000);
+    cpu->delayTimer = 0;
+    cpu->soundTimer = 0;
     for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
         memset(cpu->display[i], 0, SCREEN_WIDTH * sizeof(uint8_t));
@@ -60,6 +64,28 @@ void load_rom(CPU *cpu, FILE *file)
     {
         cpu->memory[0x200 + n] = (char) c;
         n++;
+    }
+}
+
+/*
+    summary:    Updates the values of the two CHIP-8 timers
+
+    cpu:        Pointer to CPU
+*/
+void update_timers(CPU *cpu)
+{
+    time_t currentTime = clock() / (CLOCKS_PER_SEC / 1000);
+    
+    while (currentTime - cpu->lastCycleTime > PERIOD) {
+        if (cpu->delayTimer > 0)
+        {
+            cpu->delayTimer--;
+        }
+        if (cpu->soundTimer > 0)
+        {
+            cpu->soundTimer--;
+        }
+        cpu->lastCycleTime = currentTime;
     }
 }
 
@@ -270,7 +296,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                     cpu->display[(y + i) % SCREEN_HEIGHT][(x + j) % SCREEN_WIDTH] ^= (sprite >> j) & 1;            
                 }
             }
-            
+            cpu->drawFlag = 1;
         }
         break; 
 
@@ -278,11 +304,17 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             switch (instruction & 0x00FF)
             {
                 case 0x009E:
-                    // TODO
+                    if (cpu->keyboard[cpu->registers[instruction & 0x0F00]])
+                    {
+                        cpu->pc += 2;
+                    }
                     break;
 
                 case 0x00A1:
-                    // TODO
+                    if (cpu->keyboard[cpu->registers[instruction & 0x0F00]] == 0)
+                    {
+                        cpu->pc += 2;
+                    }
                     break;    
             }
             break;
