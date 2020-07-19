@@ -1,6 +1,5 @@
 #include "stack.h"
 
-
 void stack_init(Stack *stack)
 {
     stack->capacity = STACK_CAPACITY;

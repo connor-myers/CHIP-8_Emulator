@@ -45,7 +45,8 @@ void process_cycle(CPU *cpu)
 Opcode get_next_instruction(CPU *cpu)
 {
     Opcode instruction = cpu->memory[cpu->pc] << 8 | cpu->memory[cpu->pc + 1];    
-    cpu->pc += 2;           // each instruction takes 2 cells of memory, hence +2 
+    cpu->pc += 2;           // each instruction takes 2 cells of memory, hence +2
+    fflush(stdout);
     return instruction;
 }
 
@@ -91,6 +92,13 @@ void update_timers(CPU *cpu)
 
 void perform_instruction(CPU *cpu, Opcode instruction)
 {
+    if (instruction == 0x0000) 
+    {
+        printf("Done!\n");
+        fflush(stdout);
+        exit(0);
+    }
+    fflush(stdout);
     switch (instruction & 0xF000) 
     {
         case 0x0000:
@@ -337,8 +345,68 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
                 case 0x0A:
                 {
-                    // TODO 
-                    // ? COME BACK TO LATER
+                    while(1)
+                    {
+                        uint8_t quit = false;
+                        const uint8_t *state = SDL_GetKeyboardState(NULL);
+                        if (state[SDLK_1])
+                        {
+                            cpu->keyboard[0x0] = 1;
+                            quit = true;
+                        } else if (state[SDLK_2]) {
+                            cpu->keyboard[0x1] = 1;
+                            quit = true;
+                        } else if (state[SDLK_3]) {
+                            cpu->keyboard[0x2] = 1;
+                            quit = true;
+                        } else if (state[SDLK_4]) {
+                            cpu->keyboard[0x3] = 1;
+                            quit = true;
+                        } else if (state[SDLK_q]) {
+                            cpu->keyboard[0x4] = 1;
+                            quit = true;
+                        } else if (state[SDLK_w]) {
+                            cpu->keyboard[0x5] = 1;
+                            quit = true;
+                        } else if (state[SDLK_e]) {
+                            cpu->keyboard[0x6] = 1;
+                            quit = true;
+                        } else if (state[SDLK_r]) {
+                            cpu->keyboard[0x7] = 1;
+                            quit = true;
+                        } else if (state[SDLK_a]) {
+                            cpu->keyboard[0x8] = 1;
+                            quit = true;
+                        } else if (state[SDLK_s]) {
+                            cpu->keyboard[0x9] = 1;
+                            quit = true;
+                        } else if (state[SDLK_d]) {
+                            cpu->keyboard[0xA] = 1;
+                            quit = true;
+                        } else if (state[SDLK_f]) {
+                            cpu->keyboard[0xB] = 1;
+                            quit = true;
+                        } else if (state[SDLK_z]) {
+                            cpu->keyboard[0xC] = 1;
+                            quit = true;
+                        } else if (state[SDLK_x]) {
+                            cpu->keyboard[0xD] = 1;
+                            quit = true;
+                        } else if (state[SDLK_c]) {
+                            cpu->keyboard[0xE] = 1;
+                            quit = true;
+                        } else if (state[SDLK_v]) {
+                            cpu->keyboard[0xF] = 1;
+                            quit = true;
+                        } else {
+                            // key not part of chip-8
+                        }
+                        if (quit)
+                        {
+                            break;
+                        }
+
+                    }
                 }
                 break; 
 
