@@ -146,7 +146,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0x4000:
         {
             // Skip next instruction if Vx != NN (0x3XNN)
-            uint8_t x = cpu->registers[instruction & 0x0F00];
+            uint8_t x = cpu->registers[get_nth_hex_digit(instruction, 2)];
             uint8_t kk = instruction & 0x00FF;
             if (x != kk)
             {
@@ -158,8 +158,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0x5000:
         {
             // SKip next instruction if Vx == Vy (0x5XY0)
-            uint8_t x = cpu->registers[instruction & 0x0F00];
-            uint8_t y = cpu->registers[instruction & 0x00F0];
+            uint8_t x = cpu->registers[get_nth_hex_digit(instruction, 2)];
+            uint8_t y = cpu->registers[get_nth_hex_digit(instruction, 1)];
             if (x == y) {
                 cpu->pc += 2;
             }
@@ -170,7 +170,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         {
             // Sets Vx to NN (0x6XNN)
             uint8_t kk = instruction & 0x00FF;
-            uint8_t x = instruction & 0x0F00;
+            uint8_t x = get_nth_hex_digit(instruction, 2);
             cpu->registers[x] = kk;               
         }
         break;
@@ -178,15 +178,15 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0x7000:
         {
             uint8_t kk = instruction & 0x00FF;
-            uint8_t x = instruction & 0x0F00;
+            uint8_t x = get_nth_hex_digit(instruction, 2);
             cpu->registers[x] += kk;
         }
         break;
 
         case 0x8000:
         {
-            uint8_t x = instruction & 0x0F00;
-            uint8_t y = instruction & 0x00F0;
+            uint8_t x = get_nth_hex_digit(instruction, 2);
+            uint8_t y = get_nth_hex_digit(instruction, 1);
             switch (instruction & 0x000F)
             {
                 case 0x0:
@@ -211,7 +211,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 break; 
                 case 0x4:
                 {
-                    unsigned short result = cpu->registers[x] + cpu->registers[y];
+                    // so we can store 8 bit overflow
+                    unsigned short result = cpu->registers[x] + cpu->registers[y]; 
                     if (result > 255)
                     {
                         cpu->registers[0xF] = 1;
@@ -221,7 +222,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 }
                 case 0x5:
                 {
-                    if(x > y)
+                    if(cpu->registers[x] > cpu->registers[y])
                     {
                         cpu->registers[0xF] = 1;
                     }
@@ -242,7 +243,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                     break;  
                 case 0xE:
                 {
-                    cpu->registers[0xF] = cpu->registers[x] & 0x80 == 1 ? 1 : 0;
+                    cpu->registers[0xF] = cpu->registers[x] >> 7 == 1 ? 1 : 0;
                     cpu->registers[x] *= 2;
                 }
                     break;            

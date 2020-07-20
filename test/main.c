@@ -354,7 +354,12 @@ Result test_3xkk()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.pc = 2;
+    cpu.registers[0x5] = 0x2A;
+    Opcode instruction = 0x352A;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.pc == 4;    
 }
 
 Result test_4xkk()
@@ -362,7 +367,12 @@ Result test_4xkk()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.pc = 2;
+    cpu.registers[0x5] = 0x2A;
+    Opcode instruction = 0x452B;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.pc == 4;    
 }
 
 Result test_5xy0()
@@ -370,7 +380,13 @@ Result test_5xy0()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.pc = 2;
+    cpu.registers[0x5] = 0x2A;
+    cpu.registers[0x6] = 0x2A;
+    Opcode instruction = 0x5560;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.pc == 4;     
 }
 
 Result test_6xkk()
@@ -378,7 +394,10 @@ Result test_6xkk()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    Opcode instruction = 0x651A;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[5] == 0x1A;   
 }
 
 Result test_7xkk()
@@ -386,7 +405,12 @@ Result test_7xkk()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[5] = 0x2B;
+
+    Opcode instruction = 0x751A;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[5] == 0x45;   
 }
 
 Result test_8xy0()
@@ -394,7 +418,13 @@ Result test_8xy0()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[5] = 0x2C;
+    cpu.registers[6] = 0x1A;
+
+    Opcode instruction = 0x8560;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[5] == 0x1A;   
 }
 
 Result test_8xy1()
@@ -402,7 +432,13 @@ Result test_8xy1()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0xAA;    // 10101010
+    cpu.registers[2] = 0x55;    // 01010101
+
+    Opcode instruction = 0x8121;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0xFF;     
 }
 
 Result test_8xy2()
@@ -410,7 +446,13 @@ Result test_8xy2()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0xAA;    // 10101010
+    cpu.registers[2] = 0x55;    // 01010101
+
+    Opcode instruction = 0x8122;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0x00;  
 }
 
 Result test_8xy3()
@@ -418,7 +460,13 @@ Result test_8xy3()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0xCB;    // 11001010
+    cpu.registers[2] = 0xB5;    // 10110101
+
+    Opcode instruction = 0x8123;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0x7E;   
 }
 
 Result test_8xy4()
@@ -426,7 +474,13 @@ Result test_8xy4()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0x82;    // 130
+    cpu.registers[2] = 0x8C;    // 140
+
+    Opcode instruction = 0x8124;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0x0E && cpu.registers[0xF] == 1;    
 }
 
 Result test_8xy5()
@@ -434,7 +488,13 @@ Result test_8xy5()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0x8C;    // 140
+    cpu.registers[2] = 0x82;    // 130
+
+    Opcode instruction = 0x8125;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0x0A && cpu.registers[0xF] == 1; 
 }
 
 Result test_8xy6()
@@ -442,7 +502,12 @@ Result test_8xy6()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0x05;    // odd, so least sig fig is 1
+
+    Opcode instruction = 0x8106;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0x02 && cpu.registers[0xF] == 1;    
 }
 
 Result test_8xy7()
@@ -450,7 +515,13 @@ Result test_8xy7()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0x82;    // 130
+    cpu.registers[2] = 0x8C;    // 140
+
+    Opcode instruction = 0x8127;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0x0A && cpu.registers[0xF] == 1; 
 }
 
 Result test_8xyE()
@@ -458,7 +529,12 @@ Result test_8xyE()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0x80;    // 128
+
+    Opcode instruction = 0x812E;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[1] == 0x0 && cpu.registers[0xF] == 1; 
 }
 
 Result test_9xy0()
