@@ -31,22 +31,26 @@ int main(int argc, char **argv)
     //Quit SDL subsystems
     // SDL_Quit();
 
+    cpu.lastCycleTime = clock() * 1000 / CLOCKS_PER_SEC;
+
     for(;;)
     {
-        process_cycle(&cpu);
-
-        // update display
-        if (cpu.drawFlag)
+        time_t currentTime = clock() * 1000 / CLOCKS_PER_SEC;
+                
+        if (currentTime - cpu.lastCycleTime > DELAY)
         {
-            update_display(window, cpu.display);
-            cpu.drawFlag = 0;
+            process_cycle(&cpu);
+            // update display
+            if (cpu.drawFlag)
+            {
+                update_display(window, cpu.display);
+                cpu.drawFlag = 0;
+            }
+            // timers    
+            update_timers(&cpu);
+
+            cpu.lastCycleTime = currentTime;
         }
-
-        // set keys    
-        // ?
-
-        // timers    
-        update_timers(&cpu);
     }
 
     return 0;
