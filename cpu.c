@@ -134,7 +134,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0x3000:
         {
             // Skip next instruction if Vx == NN (0x3XNN)
-            uint8_t x = cpu->registers[instruction & 0x0F00];
+            uint8_t x = cpu->registers[get_nth_hex_digit(instruction, 2)];
             uint8_t kk = instruction & 0x00FF;
             if (x == kk)
             {
@@ -462,6 +462,21 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             err_msg(BAD_INSTRUCTION);
             break;    
     }    
+}
+
+/*
+    summary:    Gets the nth hex digit from a number
+
+    number:      The number to get the nth place from
+    
+    n:           The digits place to get the nth hex digit from
+*/
+uint8_t get_nth_hex_digit(uint16_t number, uint8_t n)
+{
+    while (n--) {
+        number /= 0x10;
+    }
+    return (number % 0x10);
 }
 
 /*
