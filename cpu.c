@@ -253,8 +253,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
         case 0x9000:
         {
-            uint8_t x = instruction & 0x0F00;
-            uint8_t y = instruction & 0x00F0;
+            uint8_t x = get_nth_hex_digit(instruction, 2);
+            uint8_t y = get_nth_hex_digit(instruction, 1);
             if (cpu->registers[x] != cpu->registers[y]) {
                 cpu->pc += 2;
             }            
@@ -276,7 +276,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0xC000:
         {
             uint8_t random = rand() % 256;
-            cpu->registers[instruction & 0x0F00] = random & (instruction & 0x00FF);
+            cpu->registers[get_nth_hex_digit(instruction, 2)] = random & (instruction & 0x00FF);
         }
         break; 
 
@@ -284,8 +284,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0xD000:
         {
             uint8_t n = instruction & 0x000F;
-            uint8_t x = cpu->registers[instruction & 0x0F00];
-            uint8_t y = cpu->registers[instruction & 0x00F0];
+            uint8_t x = cpu->registers[get_nth_hex_digit(instruction, 2)];
+            uint8_t y = cpu->registers[get_nth_hex_digit(instruction, 1)];
             cpu->registers[0xF] = NO_COLLISION;
             for (int i = 0; i < n; i++)
             {
@@ -309,7 +309,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             {
                 case 0x009E:
                 {
-                    if (cpu->keyboard[cpu->registers[instruction & 0x0F00]])
+                    if (cpu->keyboard[cpu->registers[get_nth_hex_digit(instruction, 2)]])
                     {
                         cpu->pc += 2;
                     }
@@ -318,7 +318,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
                 case 0x00A1:
                 {
-                    if (cpu->keyboard[cpu->registers[instruction & 0x0F00]] == 0)
+                    if (cpu->keyboard[cpu->registers[get_nth_hex_digit(instruction, 2)]] == 0)
                     {
                         cpu->pc += 2;
                     }
@@ -330,7 +330,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
         case 0xF000:
         {
-            uint8_t x = instruction & 0x0F00;
+            uint8_t x = get_nth_hex_digit(instruction, 2);
             switch (instruction & 0x00FF)
             {
                 case 0x07:
@@ -341,68 +341,68 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
                 case 0x0A:
                 {
-                    while(1)
-                    {
-                        uint8_t quit = false;
-                        const uint8_t *state = SDL_GetKeyboardState(NULL);
-                        if (state[SDLK_1])
-                        {
-                            cpu->keyboard[0x0] = 1;
-                            quit = true;
-                        } else if (state[SDLK_2]) {
-                            cpu->keyboard[0x1] = 1;
-                            quit = true;
-                        } else if (state[SDLK_3]) {
-                            cpu->keyboard[0x2] = 1;
-                            quit = true;
-                        } else if (state[SDLK_4]) {
-                            cpu->keyboard[0x3] = 1;
-                            quit = true;
-                        } else if (state[SDLK_q]) {
-                            cpu->keyboard[0x4] = 1;
-                            quit = true;
-                        } else if (state[SDLK_w]) {
-                            cpu->keyboard[0x5] = 1;
-                            quit = true;
-                        } else if (state[SDLK_e]) {
-                            cpu->keyboard[0x6] = 1;
-                            quit = true;
-                        } else if (state[SDLK_r]) {
-                            cpu->keyboard[0x7] = 1;
-                            quit = true;
-                        } else if (state[SDLK_a]) {
-                            cpu->keyboard[0x8] = 1;
-                            quit = true;
-                        } else if (state[SDLK_s]) {
-                            cpu->keyboard[0x9] = 1;
-                            quit = true;
-                        } else if (state[SDLK_d]) {
-                            cpu->keyboard[0xA] = 1;
-                            quit = true;
-                        } else if (state[SDLK_f]) {
-                            cpu->keyboard[0xB] = 1;
-                            quit = true;
-                        } else if (state[SDLK_z]) {
-                            cpu->keyboard[0xC] = 1;
-                            quit = true;
-                        } else if (state[SDLK_x]) {
-                            cpu->keyboard[0xD] = 1;
-                            quit = true;
-                        } else if (state[SDLK_c]) {
-                            cpu->keyboard[0xE] = 1;
-                            quit = true;
-                        } else if (state[SDLK_v]) {
-                            cpu->keyboard[0xF] = 1;
-                            quit = true;
-                        } else {
-                            // key not part of chip-8
-                        }
-                        if (quit)
-                        {
-                            break;
-                        }
+                    // while(1)
+                    // {
+                    //     uint8_t quit = false;
+                    //     const uint8_t *state = SDL_GetKeyboardState(NULL);
+                    //     if (state[SDLK_1])
+                    //     {
+                    //         cpu->keyboard[0x0] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_2]) {
+                    //         cpu->keyboard[0x1] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_3]) {
+                    //         cpu->keyboard[0x2] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_4]) {
+                    //         cpu->keyboard[0x3] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_q]) {
+                    //         cpu->keyboard[0x4] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_w]) {
+                    //         cpu->keyboard[0x5] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_e]) {
+                    //         cpu->keyboard[0x6] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_r]) {
+                    //         cpu->keyboard[0x7] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_a]) {
+                    //         cpu->keyboard[0x8] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_s]) {
+                    //         cpu->keyboard[0x9] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_d]) {
+                    //         cpu->keyboard[0xA] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_f]) {
+                    //         cpu->keyboard[0xB] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_z]) {
+                    //         cpu->keyboard[0xC] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_x]) {
+                    //         cpu->keyboard[0xD] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_c]) {
+                    //         cpu->keyboard[0xE] = 1;
+                    //         quit = true;
+                    //     } else if (state[SDLK_v]) {
+                    //         cpu->keyboard[0xF] = 1;
+                    //         quit = true;
+                    //     } else {
+                    //         // key not part of chip-8
+                    //     }
+                    //     if (quit)
+                    //     {
+                    //         break;
+                    //     }
 
-                    }
+                    // }
                 }
                 break; 
 
@@ -426,15 +426,15 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
                 case 0x29:
                 {
-                    cpu->i = get_font_address(cpu->registers[x]);                                                            
+                    cpu->i = get_font_address(cpu->registers[x]);                                                         
                 }
                 break; 
 
                 case 0x33:
                 {
-                    cpu->memory[cpu->i] = get_font_address(cpu->registers[x] / 100);       
-                    cpu->memory[cpu->i + 1] = get_font_address((cpu->registers[x] % 100) / 10);    
-                    cpu->memory[cpu->i + 2] = get_font_address((cpu->registers[x] % 10));                                               
+                    cpu->memory[cpu->i] = get_font_address(get_nth_dec_digit(cpu->registers[x], 2));       
+                    cpu->memory[cpu->i + 1] = get_font_address(get_nth_dec_digit(cpu->registers[x], 1));    
+                    cpu->memory[cpu->i + 2] = get_font_address(get_nth_dec_digit(cpu->registers[x], 0));                                             
                 }
                 break;
 
@@ -481,68 +481,28 @@ uint8_t get_nth_hex_digit(uint16_t number, uint8_t n)
 }
 
 /*
+    summary:    Gets the nth dec digit from a number
+
+    number:      The number to get the nth place from
+    
+    n:           The digits place to get the nth dec digit from
+*/
+uint8_t get_nth_dec_digit(uint16_t number, uint8_t n)
+{
+    while (n--) {
+        number /= 10;
+    }
+    return (number % 10);
+}
+
+/*
     summary:    Gets the location in memory for font for the corresponding hex digit
 
     value:      The hex digit to get location in memory for the font for
 */
 uint8_t get_font_address(uint8_t value)
 {
-    uint8_t location;
-    switch (value)
-    {
-        case 0x0:
-            location = 0x000;
-            break;
-        case 0x1:
-            location = 0x005;
-            break;
-        case 0x2:
-            location = 0x00A;
-            break;
-        case 0x3:
-            location = 0x00F;
-            break;
-        case 0x4:
-            location = 0x014;
-            break;
-        case 0x5:
-            location = 0x019;
-            break;
-        case 0x6:
-            location = 0x01E;
-            break;
-        case 0x7:
-            location = 0x023;
-            break;
-        case 0x8:
-            location = 0x028;
-            break;
-        case 0x9:
-            location = 0x02D;
-            break;
-        case 0xA:
-            location = 0x032;
-            break;
-        case 0xB:
-            location = 0x037;
-            break;
-        case 0xC:
-            location = 0x03C;
-            break;
-        case 0xD:
-            location = 0x041;
-            break;
-        case 0xE:
-            location = 0x046;
-            break;
-        case 0xF:
-            location = 0x04B;
-            break;   
-        default:
-            err_msg(UNKNOWN_FONT_DATA);
-            break;                                                      
-    }
-    return location;
+    return value * 5;
 }
 
 /*

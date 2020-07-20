@@ -542,7 +542,13 @@ Result test_9xy0()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.pc = 2;
+    cpu.registers[0x5] = 0x2A;
+    cpu.registers[0x6] = 0x2B;
+    Opcode instruction = 0x9560;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.pc == 4;    
 }
 
 Result test_Annn()
@@ -550,15 +556,21 @@ Result test_Annn()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    Opcode instruction = 0xA3AB;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.i == 0x3AB;    
 }
 
 Result test_Bnnn()
 {
     CPU cpu;
     cpu_init(&cpu);
+    cpu.registers[0x0] = 0xA;
+    Opcode instruction = 0xB21C;
+    perform_instruction(&cpu, instruction);   
 
-    return FAIL;    
+    return cpu.pc == 0x226;
 }
 
 Result test_Cxkk()
@@ -566,13 +578,18 @@ Result test_Cxkk()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    Opcode instruction = 0xC1FF;
+    perform_instruction(&cpu, instruction);
+
+    return (cpu.registers[0x1] >= 0 && cpu.registers[0x1] <= 255);    
 }
 
 Result test_Dxyn()
 {
     CPU cpu;
     cpu_init(&cpu);
+
+    // maybe just test collision works?. Test manually later.
 
     return FAIL;    
 }
@@ -582,6 +599,8 @@ Result test_Ex9E()
     CPU cpu;
     cpu_init(&cpu);
 
+    // can't unit test this. Test manually later.
+
     return FAIL;    
 }
 
@@ -589,6 +608,8 @@ Result test_ExA1()
 {
     CPU cpu;
     cpu_init(&cpu);
+
+    // can't unit test this. Test manually later.
 
     return FAIL;    
 }
@@ -598,13 +619,19 @@ Result test_Fx07()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.delayTimer = 0xB;
+    Opcode instruction = 0xF407;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.registers[0x4] == 0xB;    
 }
 
 Result test_Fx0A()
 {
     CPU cpu;
     cpu_init(&cpu);
+
+    // skip    
 
     return FAIL;    
 }
@@ -614,7 +641,11 @@ Result test_Fx15()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0xE;
+    Opcode instruction = 0xF115;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.delayTimer == 0xE;    
 }
 
 Result test_Fx18()
@@ -622,7 +653,11 @@ Result test_Fx18()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[1] = 0xE;
+    Opcode instruction = 0xF118;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.soundTimer == 0xE;
 }
 
 Result test_Fx1E()
@@ -630,7 +665,13 @@ Result test_Fx1E()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.i = 0x9;
+    cpu.registers[0x7] = 0xA;
+
+    Opcode instruction = 0xF71E;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.i == 0x13; 
 }
 
 Result test_Fx29()
@@ -638,7 +679,12 @@ Result test_Fx29()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.registers[0x2] = 0xA;
+
+    Opcode instruction = 0xF229;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.i == 0x032;
 }
 
 Result test_Fx33()
@@ -646,7 +692,14 @@ Result test_Fx33()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.i = 0x125;
+    cpu.registers[0x2] = 0x98; // 152
+    Opcode instruction = 0xF233;
+    perform_instruction(&cpu, instruction);
+
+    return cpu.memory[0x125] == 0x005
+            && cpu.memory[0x126] == 0x019
+            && cpu.memory[0x127] == 0x00A;
 }
 
 Result test_Fx55()
@@ -654,7 +707,23 @@ Result test_Fx55()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    for (int i = 0; i < 0xE; i++)
+    {
+        cpu.registers[i] = i + 1;
+    }
+
+    cpu.i = 0x500;
+    Opcode instruction = 0xFE55;
+    perform_instruction(&cpu, instruction);
+
+    for (int i = 0; i < 0xE; i++)
+    {
+        if (cpu.memory[cpu.i + i] != i + 1) {
+            return FAIL;
+        }
+    }
+
+    return PASS;
 }
 
 Result test_Fx65()
@@ -662,7 +731,24 @@ Result test_Fx65()
     CPU cpu;
     cpu_init(&cpu);
 
-    return FAIL;    
+    cpu.i = 0x500;
+
+    for (int i = 0; i < 0xE; i++)
+    {
+        cpu.memory[cpu.i + i] = i + 1;
+    }
+
+    Opcode instruction = 0xFE65;
+    perform_instruction(&cpu, instruction);
+
+    for (int i = 0; i < 0xE; i++)
+    {
+        if (cpu.registers[i] != i + 1) {
+            return FAIL;
+        }
+    }
+
+    return PASS;    
 }
 
 void print_error(char *string)
