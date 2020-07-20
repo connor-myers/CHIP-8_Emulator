@@ -290,14 +290,14 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             for (int i = 0; i < n; i++)
             {
                 uint8_t sprite = cpu->memory[cpu->i + i];
-                for (int j = 0; j < 7; j++)
+                for (int j = 0; j < 8; j++)
                 {
                     // if both are one, than they're going to cancel out in XOR; thus a collision
                     if (cpu->display[(y + i) % SCREEN_HEIGHT][(x + j) % SCREEN_WIDTH] == 1 && (sprite >> j) & 1 == 1)
                     {
                         cpu->registers[0xF] = COLLISION;
                     }
-                    cpu->display[(y + i) % SCREEN_HEIGHT][(x + j) % SCREEN_WIDTH] ^= (sprite >> j) & 1;            
+                    cpu->display[(y + i) % SCREEN_HEIGHT][(x + -j + 8) % SCREEN_WIDTH] ^= (sprite >> j) & 1;            
                 }
             }
             cpu->drawFlag = 1;

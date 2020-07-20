@@ -38,6 +38,18 @@ int main(int argc, char **argv)
         // update display
         if (cpu.drawFlag)
         {
+            for (int i = 0; i < SCREEN_HEIGHT; i++)
+    {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
+            if (cpu.display[i][j] == 1) {
+                printf("*");
+            } else {
+                printf(" ");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n\n\n\n");
             update_display(window, cpu.display);
             cpu.drawFlag = 0;
         }
