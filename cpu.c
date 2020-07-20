@@ -216,6 +216,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                     if (result > 255)
                     {
                         cpu->registers[0xF] = 1;
+                    } else {
+                        cpu->registers[0xF] = 0;
                     }
                     cpu->registers[x] = result & 0xFF;
                     break;
@@ -225,6 +227,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                     if(cpu->registers[x] > cpu->registers[y])
                     {
                         cpu->registers[0xF] = 1;
+                    } else {
+                        cpu->registers[0xF] = 0;
                     }
                     cpu->registers[x] -= cpu->registers[y];
                 }
