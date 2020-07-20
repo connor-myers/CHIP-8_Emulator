@@ -76,18 +76,13 @@ void load_rom(CPU *cpu, FILE *file)
 */
 void update_timers(CPU *cpu)
 {
-    time_t currentTime = clock() / (CLOCKS_PER_SEC / 1000);
-
-    while (currentTime - cpu->lastCycleTime > PERIOD) {
-        if (cpu->delayTimer > 0)
-        {
-            cpu->delayTimer--;
-        }
-        if (cpu->soundTimer > 0)
-        {
-            cpu->soundTimer--;
-        }
-        cpu->lastCycleTime = currentTime;
+    if (cpu->delayTimer > 0)
+    {
+        cpu->delayTimer--;
+    }
+    if (cpu->soundTimer > 0)
+    {
+        cpu->soundTimer--;
     }
 }
 
