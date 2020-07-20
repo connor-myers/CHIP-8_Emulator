@@ -3,12 +3,10 @@
 int main(int argc, char **argv)
 {
     printf("Running chip8 tests...\n");
-    CPU cpu;
-    cpu_init(&cpu);
-
+    
     Result result;
 
-    result = test_00E0(&cpu);
+    result = test_00E0();
     if (result == FAIL)
     {
         print_error("test_00E0 failed");
@@ -16,7 +14,7 @@ int main(int argc, char **argv)
         print_good("test_00E0 passed");
     }
 
-    result = test_00EE(&cpu);
+    result = test_00EE();
     if (result == FAIL)
     {
         print_error("test_00EE failed");
@@ -24,7 +22,7 @@ int main(int argc, char **argv)
         print_good("test_00EE passed");
     }
 
-    result = test_1nnn(&cpu);
+    result = test_1nnn();
     if (result == FAIL)
     {
         print_error("test_1nnn failed");
@@ -36,24 +34,26 @@ int main(int argc, char **argv)
 /*
     Tests the 00E0 Opcode
 */
-Result test_00E0(CPU *cpu)
+Result test_00E0()
 {
+    CPU cpu;
+    cpu_init(&cpu);
     for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
         for (int j = 0; j < SCREEN_WIDTH; j++)
         {
-            cpu->display[i][j] = 1;
+            cpu.display[i][j] = 1;
         }
     }
 
     Opcode instruction = 0x00E0;
-    perform_instruction(cpu, instruction);
+    perform_instruction(&cpu, instruction);
 
     for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
         for (int j = 0; j < SCREEN_WIDTH; j++)
         {
-            if (cpu->display[i][j] != 0) {
+            if (cpu.display[i][j] != 0) {
                 return FAIL;
             }
         }
@@ -61,20 +61,30 @@ Result test_00E0(CPU *cpu)
     return PASS;
 }
 
-Result test_00EE(CPU *cpu)
+Result test_00EE()
 {
-    return FAIL;
+    CPU cpu;
+    cpu_init(&cpu);
+    Opcode instruction = 0x00EE;
+    cpu.stack[0] = 0xFFF;
+    cpu.sp = 1;
+
+    perform_instruction(&cpu, instruction);
+
+    return cpu.pc == 0xFFF && cpu.sp == 0;
 }
 
-Result test_1nnn(CPU *cpu)
+Result test_1nnn()
 {
+    CPU cpu;
+    cpu_init(&cpu);
     // ROM which should jump to memory location
     FILE *rom = fopen("test_roms/1nnn_test_rom.ch8", "r");
-    load_rom(cpu, rom);
-    process_cycle(cpu);
+    load_rom(&cpu, rom);
+    process_cycle(&cpu);
     // if memory location was changed properly, next instruction should be
     // wiping the display
-    Opcode instruction = get_next_instruction(cpu);
+    Opcode instruction = get_next_instruction(&cpu);
     return instruction == 0x00E0;
 }
 

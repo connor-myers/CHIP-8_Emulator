@@ -45,25 +45,6 @@ void update_display(SDL_Window *window, u_int8_t display[SCREEN_HEIGHT][SCREEN_W
     SDL_Renderer *renderer = SDL_GetRenderer(window);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // the rect color (solid white)
 
-    // testing display
-    display[0][0] = 1;
-    display[0][1] = 1;
-    display[0][2] = 1;
-    display[0][3] = 1;
-    display[0][4] = 1;
-    display[0][5] = 1;
-    display[0][6] = 1;
-    display[0][7] = 1;
-
-    display[0][0] = 1;
-    display[1][0] = 1;
-    display[2][0] = 1;
-    display[3][0] = 1;
-    display[4][0] = 1;
-    display[5][0] = 1;
-    display[6][0] = 1;
-    display[7][0] = 1;
-
     for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
         for (int j = 0; j < SCREEN_WIDTH; j++)
@@ -72,7 +53,6 @@ void update_display(SDL_Window *window, u_int8_t display[SCREEN_HEIGHT][SCREEN_W
                 SDL_Rect rect = {j * SCALE_FACTOR, i * SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR};
                 SDL_RenderFillRect(renderer, &rect);
             }
-            
         }
     }
 

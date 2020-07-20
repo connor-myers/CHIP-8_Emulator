@@ -7,13 +7,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-#include "stack.h"
 #include "errs.h"
 #include "display.h"
 
 #define MEMORY_SIZE 4096
 #define NUM_REGISTERS 16
 #define NUM_KEYS 0xF
+#define STACK_SIZE 16
 #define PROGRAM_START 0x200         // the address program execution begins at
 #define COLLISION 1
 #define NO_COLLISION 0
@@ -21,12 +21,12 @@
 
 typedef unsigned short Opcode;
 
-
 typedef struct CPU {
     uint8_t memory[MEMORY_SIZE];                                   // CHIP-8 Memory
     uint8_t registers[NUM_REGISTERS];                              // CHIP-8 Registers
     uint8_t keyboard[NUM_KEYS];
-    Stack stack;                                                   // program stack
+    uint16_t stack[STACK_SIZE];                                    // Stack
+    uint8_t sp;                                                    // Stack pointer
     int16_t pc;                                                    // program counter
     uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH];                // the graphical display
     uint16_t i;                                                    // I register
@@ -34,8 +34,6 @@ typedef struct CPU {
     time_t delayTimer;
     time_t soundTimer;
     time_t lastCycleTime;                                           // Time of last CPU cycle
-
-
 } CPU;
 
 void cpu_init(CPU *cpu);

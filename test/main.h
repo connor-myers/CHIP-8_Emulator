@@ -14,9 +14,9 @@ void print_error(char *string);
 void print_good(char *string);
 
 // tests
-Result test_00E0(CPU *cpu);
-Result test_00EE(CPU *cpu);
-Result test_1nnn(CPU *cpu);
+Result test_00E0();
+Result test_00EE();
+Result test_1nnn();
 
 // utility
 void print_display(CPU* cpu);

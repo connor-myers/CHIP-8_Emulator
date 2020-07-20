@@ -7,7 +7,6 @@
 #include "display.h"
 #include "cpu.h"
 #include "errs.h"
-#include "stack.h"
 
 /* definitions */
 

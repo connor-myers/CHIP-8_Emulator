@@ -11,8 +11,9 @@ void cpu_init(CPU *cpu)
     memset(cpu->memory, 0, MEMORY_SIZE * sizeof(uint8_t));
     memset(cpu->registers, 0, NUM_REGISTERS * sizeof(uint8_t));
     memset(cpu->keyboard, 0, NUM_KEYS * sizeof(uint8_t));
-    stack_init(&cpu->stack);
     load_font_data(cpu);
+    memset(cpu->stack, 0, STACK_SIZE * sizeof(uint16_t));
+    cpu->sp = 0;
     cpu->pc = PROGRAM_START;
     cpu->i = 0;
     cpu->drawFlag = 0;
@@ -92,13 +93,6 @@ void update_timers(CPU *cpu)
 
 void perform_instruction(CPU *cpu, Opcode instruction)
 {
-    if (instruction == 0x0000) 
-    {
-        printf("Done!\n");
-        fflush(stdout);
-        exit(0);
-    }
-    fflush(stdout);
     switch (instruction & 0xF000) 
     {
         case 0x0000:
@@ -114,7 +108,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 case 0x00EE:
                 {
                     // Return from subroutine
-                    cpu->pc = stack_pop(&cpu->stack);
+                    cpu->sp--;
+                    cpu->pc = cpu->stack[cpu->sp];
                 }
                 break;    
             }
@@ -130,7 +125,8 @@ void perform_instruction(CPU *cpu, Opcode instruction)
         case 0x2000:
         {
             // Call subroutine at nnn.
-            stack_push(&cpu->stack, cpu->pc);
+            cpu->stack[cpu->sp] = cpu->pc;
+            cpu->sp++;
             cpu->pc = instruction & 0x0FFF;
         }
         break;  
@@ -293,7 +289,6 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             for (int i = 0; i < n; i++)
             {
                 uint8_t sprite = cpu->memory[cpu->i + i];
-                // (sprite >> j) & 1;
                 for (int j = 0; j < 7; j++)
                 {
                     // if both are one, than they're going to cancel out in XOR; thus a collision

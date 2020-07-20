@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     SDL_Window *window;
     init_display(&window);
 
-    //update_display(window, cpu.display);
+    update_display(window, cpu.display);
 
     // loading ROM
     FILE *rom = fopen(argv[1], "r");
@@ -31,8 +31,6 @@ int main(int argc, char **argv)
     //Quit SDL subsystems
     // SDL_Quit();
 
-    //int i = 0;
-
     for(;;)
     {
         process_cycle(&cpu);
@@ -49,10 +47,6 @@ int main(int argc, char **argv)
 
         // timers    
         update_timers(&cpu);
-        // i++;
-        // if (i > 10) {
-        //     exit(0);
-        // }
     }
 
     return 0;
