@@ -432,15 +432,16 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
                 case 0x33:
                 {
-                    cpu->memory[cpu->i] = get_font_address(get_nth_dec_digit(cpu->registers[x], 2));       
-                    cpu->memory[cpu->i + 1] = get_font_address(get_nth_dec_digit(cpu->registers[x], 1));    
-                    cpu->memory[cpu->i + 2] = get_font_address(get_nth_dec_digit(cpu->registers[x], 0));                                             
+                    cpu->memory[cpu->i] = get_nth_dec_digit(cpu->registers[x], 2);       
+                    cpu->memory[cpu->i + 1] = get_nth_dec_digit(cpu->registers[x], 1);    
+                    cpu->memory[cpu->i + 2] = get_nth_dec_digit(cpu->registers[x], 0); 
+                                       
                 }
                 break;
 
                 case 0x55:
                 {
-                    for (int i = 0; i < x; i++)
+                    for (int i = 0; i <= x; i++)
                     {
                         cpu->memory[cpu->i + i] = cpu->registers[i];
                     }
@@ -449,7 +450,7 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
                 case 0x65:
                 {
-                    for (int i = 0; i < x; i++)
+                    for (int i = 0; i <= x; i++)
                     {
                         cpu->registers[i] = cpu->memory[cpu->i + i];
                     }

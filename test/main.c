@@ -697,9 +697,9 @@ Result test_Fx33()
     Opcode instruction = 0xF233;
     perform_instruction(&cpu, instruction);
 
-    return cpu.memory[0x125] == 0x005
-            && cpu.memory[0x126] == 0x019
-            && cpu.memory[0x127] == 0x00A;
+    return cpu.memory[0x125] == 1
+            && cpu.memory[0x126] == 5
+            && cpu.memory[0x127] == 2;
 }
 
 Result test_Fx55()
@@ -769,7 +769,7 @@ void print_display(CPU* cpu)
     for (int i = 0; i < SCREEN_HEIGHT; i++)
     {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
-            printf("%02x ", cpu->display[i][j]);
+            printf("%02x", cpu->display[i][j]);
         }
         printf("\n");
     }

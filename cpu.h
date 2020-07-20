@@ -41,6 +41,8 @@ void process_cycle(CPU *cpu);
 Opcode get_next_instruction(CPU *cpu);
 void update_timers(CPU *cpu);
 void perform_instruction(CPU *cpu, Opcode instruction);
+uint8_t get_nth_hex_digit(uint16_t number, uint8_t n);
+uint8_t get_nth_dec_digit(uint16_t number, uint8_t n);
 uint8_t get_font_address(uint8_t value);
 void load_font_data(CPU *cpu);
 void load_rom(CPU *cpu, FILE *file);
