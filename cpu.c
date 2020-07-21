@@ -352,68 +352,74 @@ void perform_instruction(CPU *cpu, Opcode instruction)
 
                 case 0x0A:
                 {
-                    // while(1)
-                    // {
-                    //     uint8_t quit = false;
-                    //     const uint8_t *state = SDL_GetKeyboardState(NULL);
-                    //     if (state[SDLK_1])
-                    //     {
-                    //         cpu->keyboard[0x0] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_2]) {
-                    //         cpu->keyboard[0x1] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_3]) {
-                    //         cpu->keyboard[0x2] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_4]) {
-                    //         cpu->keyboard[0x3] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_q]) {
-                    //         cpu->keyboard[0x4] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_w]) {
-                    //         cpu->keyboard[0x5] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_e]) {
-                    //         cpu->keyboard[0x6] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_r]) {
-                    //         cpu->keyboard[0x7] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_a]) {
-                    //         cpu->keyboard[0x8] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_s]) {
-                    //         cpu->keyboard[0x9] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_d]) {
-                    //         cpu->keyboard[0xA] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_f]) {
-                    //         cpu->keyboard[0xB] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_z]) {
-                    //         cpu->keyboard[0xC] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_x]) {
-                    //         cpu->keyboard[0xD] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_c]) {
-                    //         cpu->keyboard[0xE] = 1;
-                    //         quit = true;
-                    //     } else if (state[SDLK_v]) {
-                    //         cpu->keyboard[0xF] = 1;
-                    //         quit = true;
-                    //     } else {
-                    //         // key not part of chip-8
-                    //     }
-                    //     if (quit)
-                    //     {
-                    //         break;
-                    //     }
-
-                    // }
+                    if (cpu->keyboard[0])
+                    {
+                        cpu->registers[x] = 0;
+                    }
+                    else if (cpu->keyboard[1])
+                    {
+                        cpu->registers[x] = 1;
+                    }
+                    else if (cpu->keyboard[2])
+                    {
+                        cpu->registers[x] = 2;
+                    }
+                    else if (cpu->keyboard[3])
+                    {
+                        cpu->registers[x] = 3;
+                    }
+                    else if (cpu->keyboard[4])
+                    {
+                        cpu->registers[x] = 4;
+                    }
+                    else if (cpu->keyboard[5])
+                    {
+                        cpu->registers[x] = 5;
+                    }
+                    else if (cpu->keyboard[6])
+                    {
+                        cpu->registers[x] = 6;
+                    }
+                    else if (cpu->keyboard[7])
+                    {
+                        cpu->registers[x] = 7;
+                    }
+                    else if (cpu->keyboard[8])
+                    {
+                        cpu->registers[x] = 8;
+                    }
+                    else if (cpu->keyboard[9])
+                    {
+                        cpu->registers[x] = 9;
+                    }
+                    else if (cpu->keyboard[0xA])
+                    {
+                        cpu->registers[x] = 0xA;
+                    }
+                    else if (cpu->keyboard[0xB])
+                    {
+                        cpu->registers[x] = 0xB;
+                    }
+                    else if (cpu->keyboard[0xC])
+                    {
+                        cpu->registers[x] = 0xC;
+                    }
+                    else if (cpu->keyboard[0xD])
+                    {
+                        cpu->registers[x] = 0xD;
+                    }
+                    else if (cpu->keyboard[0xE])
+                    {
+                        cpu->registers[x] = 0xE;
+                    }
+                    else if (cpu->keyboard[0xF])
+                    {
+                        cpu->registers[x] = 0xF;
+                    }
+                    else
+                    {
+                        cpu->pc -= 2;
+                    }                 
                 }
                 break; 
 
