@@ -43,6 +43,8 @@ void init_display(SDL_Window **window)
 void update_display(SDL_Window *window, u_int8_t display[SCREEN_HEIGHT][SCREEN_WIDTH])
 {
     SDL_Renderer *renderer = SDL_GetRenderer(window);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // the rect color (solid white)
 
     for (int i = 0; i < SCREEN_HEIGHT; i++)

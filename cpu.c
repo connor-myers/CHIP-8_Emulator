@@ -298,18 +298,41 @@ void perform_instruction(CPU *cpu, Opcode instruction)
             uint8_t n = instruction & 0x000F;
             uint8_t x = cpu->registers[get_nth_hex_digit(instruction, 2)];
             uint8_t y = cpu->registers[get_nth_hex_digit(instruction, 1)];
-            cpu->registers[0xF] = NO_COLLISION;
+            cpu->registers[0xF] = 0;
             for (int i = 0; i < n; i++)
             {
                 uint8_t sprite = cpu->memory[cpu->i + i];
                 for (int j = 0; j < 8; j++)
                 {
-                    // if both are one, than they're going to cancel out in XOR; thus a collision
-                    if (cpu->display[(y + i) % SCREEN_HEIGHT][(x + j) % SCREEN_WIDTH] == 1 && (sprite >> j) & 1 == 1)
+                    if ((sprite >> j & 1) == 1 && cpu->display[(y + i) % SCREEN_HEIGHT][(x + -j + 8) % SCREEN_WIDTH] == 1) 
                     {
-                        cpu->registers[0xF] = COLLISION;
-                    }
-                    cpu->display[(y + i) % SCREEN_HEIGHT][(x + -j + 8) % SCREEN_WIDTH] ^= (sprite >> j) & 1;            
+                        cpu->registers[0xF] = 1;
+                    }    
+                    // printf("Before\n");
+                    // for (int y = 0; y < SCREEN_WIDTH; y++)
+                    // {
+                    //     for (int z = 0; z < SCREEN_HEIGHT; z++)
+                    //     {
+                    //         if (cpu->display[y][z] == 1)
+                    //         {
+                    //             printf("*");
+                    //         }
+                    //     }
+                    //     printf("\n");
+                    // }
+                    cpu->display[(y + i) % SCREEN_HEIGHT][(x + -j + 8) % SCREEN_WIDTH] ^= (sprite >> j) & 1;  
+                    // printf("After\n");
+                    // for (int y = 0; y < SCREEN_WIDTH; y++)
+                    // {
+                    //     for (int z = 0; z < SCREEN_HEIGHT; z++)
+                    //     {
+                    //         if (cpu->display[y][z] == 1)
+                    //         {
+                    //             printf("*");
+                    //         }
+                    //     }
+                    //     printf("\n");
+                    // }
                 }
             }
             cpu->drawFlag = 1;
