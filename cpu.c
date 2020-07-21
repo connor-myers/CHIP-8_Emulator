@@ -304,35 +304,11 @@ void perform_instruction(CPU *cpu, Opcode instruction)
                 uint8_t sprite = cpu->memory[cpu->i + i];
                 for (int j = 0; j < 8; j++)
                 {
-                    if ((sprite >> j & 1) == 1 && cpu->display[(y + i) % SCREEN_HEIGHT][(x + -j + 8) % SCREEN_WIDTH] == 1) 
+                    if ((sprite >> j & 1) == 1 && cpu->display[(y + i) % SCREEN_HEIGHT][(x + -j + 7) % SCREEN_WIDTH] == 1) 
                     {
                         cpu->registers[0xF] = 1;
                     }    
-                    // printf("Before\n");
-                    // for (int y = 0; y < SCREEN_WIDTH; y++)
-                    // {
-                    //     for (int z = 0; z < SCREEN_HEIGHT; z++)
-                    //     {
-                    //         if (cpu->display[y][z] == 1)
-                    //         {
-                    //             printf("*");
-                    //         }
-                    //     }
-                    //     printf("\n");
-                    // }
-                    cpu->display[(y + i) % SCREEN_HEIGHT][(x + -j + 8) % SCREEN_WIDTH] ^= (sprite >> j) & 1;  
-                    // printf("After\n");
-                    // for (int y = 0; y < SCREEN_WIDTH; y++)
-                    // {
-                    //     for (int z = 0; z < SCREEN_HEIGHT; z++)
-                    //     {
-                    //         if (cpu->display[y][z] == 1)
-                    //         {
-                    //             printf("*");
-                    //         }
-                    //     }
-                    //     printf("\n");
-                    // }
+                    cpu->display[(y + i) % SCREEN_HEIGHT][(x + ((-1 * j) + 7)) % SCREEN_WIDTH] ^= (sprite >> j) & 1;  
                 }
             }
             cpu->drawFlag = 1;
@@ -609,7 +585,7 @@ void load_font_data(CPU *cpu)
     cpu->memory[0x029] = 0x90;
     cpu->memory[0x02A] = 0xF0;
     cpu->memory[0x02B] = 0x90;
-    cpu->memory[0x02C] = 0x90;
+    cpu->memory[0x02C] = 0xF0;
 
     // 9
     cpu->memory[0x02D] = 0xF0;

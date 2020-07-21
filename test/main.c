@@ -193,7 +193,7 @@ int main(int argc, char **argv)
     result = test_Ex9E();
     if (result == FAIL)
     {
-        print_error("test_Ex9E failed");
+        print_error("test_Ex9E failed (Impossible to unit test)");
     } else {
         print_good("test_Ex9E passed");
     }
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
     result = test_ExA1();
     if (result == FAIL)
     {
-        print_error("test_ExA1 failed");
+        print_error("test_ExA1 failed (Impossible to unit test)");
     } else {
         print_good("test_ExA1 passed");
     }
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
     result = test_Fx0A();
     if (result == FAIL)
     {
-        print_error("test_Fx0A failed");
+        print_error("test_Fx0A failed (Impossible to unit test)");
     } else {
         print_good("test_Fx0A passed");
     }
@@ -589,9 +589,34 @@ Result test_Dxyn()
     CPU cpu;
     cpu_init(&cpu);
 
-    // maybe just test collision works?. Test manually later.
+    cpu.registers[0] = 0;
+    cpu.registers[1] = 0;
+    cpu.i = 0x210;
 
-    return FAIL;    
+    cpu.memory[0x210] = 0xFF;
+
+    Opcode instruction = 0xD011;
+    perform_instruction(&cpu, instruction);
+    perform_instruction(&cpu, instruction);
+
+    // perform twice, display should be empty and collision flag set
+
+    for (int i = 0; i < SCREEN_HEIGHT; i++)
+    {
+        for (int j = 0; j < SCREEN_WIDTH; j++)
+        {
+            if (cpu.display[i][j] != 0) {
+                return FAIL;
+            }
+        }
+    }
+
+    if (cpu.registers[0xF] != 1)
+    {
+        return FAIL;
+    }    
+
+    return PASS;   
 }
 
 Result test_Ex9E()
