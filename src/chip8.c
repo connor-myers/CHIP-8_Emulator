@@ -6,7 +6,7 @@
 
         chip8:          Pointer to new/empty CHIP8 struct                
 */
-void CHIP8_init(CHIP8 *chip8)
+void init_CHIP8(CHIP8 *chip8, Settings *userSettings)
 {
         // setting seed for random number generation
         srand(time(NULL));
@@ -35,6 +35,9 @@ void CHIP8_init(CHIP8 *chip8)
 
         // Loading the font data into memory
         load_font_data(chip8);
+
+        // Loading user settings into main module
+        chip8->userSettings = userSettings;
 }
 /*
     summary:    Loads the font data into memory

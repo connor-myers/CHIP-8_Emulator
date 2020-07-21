@@ -9,6 +9,15 @@ int main(int argc, char **argv)
 
         Settings userSettings;
         load_settings(&userSettings, argc - 1, argv + 1);    
+
+        CHIP8 chip8;
+        init_CHIP8(&chip8, &userSettings);
+
+        init_debugger(&chip8);
+        update_debugger(&chip8);
+
+        getch();
+        endwin();
 }
 
 /*
