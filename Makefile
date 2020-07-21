@@ -1,24 +1,18 @@
+CC = gcc
 OPTS =	-Wall -pedantic -g -w -std=gnu99
+SRC_OBJ = src/main.c src/chip8.c src/graphics.c src/input.c src/sound.c src/timer.c 
+TST_OBJ = test/main.c
 
-all: chip8 clean
+all:	chip8 chip8_test clean
 
-chip8:	main.o cpu.o errs.o stack.o display.o
-	gcc $(OPTS) -o chip8 main.o cpu.o errs.o stack.o display.o -lSDL2
+%.o: %.c
+	$(CC) -c -o $@ $< $(OPTS)
 
-main.o:
-	gcc $(OPTS) -c main.c
+chip8: $(SRC_OBJ)
+	$(CC) -o $@ $^ $(OPTS)
 
-cpu.o:
-	gcc $(OPTS) -c cpu.c
-
-errs.o:
-	gcc $(OPTS) -c errs.c
-
-stack.o:
-	gcc $(OPTS) -c stack.c
-
-display.o:
-	gcc $(OPTS) -c display.c
+chip8_test: $(TST_OBJ)
+	$(CC) -o $@ $^ $(OPTS)
 
 clean:
-	rm -f *.o *~ 	
+	rm -f *.o *~
