@@ -10,9 +10,13 @@
 #include "utility.h"
 
 /* Constants */
-#define MIN_ARGS        2       // Minimum number of args required for program
-                                // to run
-#define ROM_FILE_EXTN   "ch8"   // The file extension for a CHIP-8 ROM                             
+#define MIN_ARGS            2           // Minimum number of args required for
+                                        // program to run
+#define ROM_FILE_EXTN       "ch8"       // The file extension for a CHIP-8 ROM 
+#define DEFAULT_CLOCK_SPEED 500         // The default number of CPU 
+                                        // instructions per second
+#define DEFAULT_SCALER      25          // The default scaling of display
+
 
 /* Typedefs */
 typedef struct Settings

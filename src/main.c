@@ -22,8 +22,8 @@ int main(int argc, char **argv)
 void load_settings(Settings *settings, int numArgs, char **arguments)
 {
         settings->debugMode = false;
-        settings->clockSpeed = 500;
-        settings->displayScale = 25;
+        settings->clockSpeed = DEFAULT_CLOCK_SPEED;
+        settings->displayScale = DEFAULT_SCALER;
         settings->rom = arguments[numArgs - 1];
 
         char *fileExtension = get_file_extension(settings->rom);
