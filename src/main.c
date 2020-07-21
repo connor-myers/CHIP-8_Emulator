@@ -8,17 +8,55 @@ int main(int argc, char **argv)
         }     
 
         Settings userSettings;
-        load_settings(&userSettings, argc - 1, argv + 1);        
+        load_settings(&userSettings, argc - 1, argv + 1);    
 }
 
 /*
         summary:        Loads user settings from program arguments
 
-        settings:           Pointer to empty settings block
+        settings:       Pointer to empty settings block
         numArgs:        The number of arguments (argc - 1)
-        arguments:      The arguments into the program (not including program name)
+        arguments:      The arguments into the program
+                        (not including program name)
 */
 void load_settings(Settings *settings, int numArgs, char **arguments)
 {
-                
+        settings->debugMode = false;
+        settings->clockSpeed = 500;
+        settings->displayScale = 25;
+        settings->rom = arguments[numArgs - 1];
+
+        char *fileExtension = get_file_extension(settings->rom);
+        if (fileExtension == NULL || strcmp(fileExtension, ROM_FILE_EXTN) != 0)
+        {
+                exit_with_msg(BAD_ROM);
+        }
+
+        for (int i = 0; i < numArgs - 1; i++)
+        {
+                if (strcmp(arguments[i], "-d") == 0)
+                {
+                        settings->debugMode = true;
+                }
+                if (arguments[i][0] == '-' && arguments[i][1] == 'r')
+                {
+                        StringConErr error = GOOD;
+                        settings->clockSpeed = 
+                                        string_to_int(arguments[i] + 2, &error);
+                        if (error || settings->clockSpeed <= 0)
+                        {
+                                exit_with_msg(BAD_REFRESH_FLAG);                           
+                        } 
+                }
+                if (arguments[i][0] == '-' && arguments[i][1] == 's')
+                {
+                        StringConErr error = GOOD;
+                        settings->displayScale = 
+                                        string_to_int(arguments[i] + 2, &error);
+                        if (error || settings->displayScale <= 0)
+                        {
+                                exit_with_msg(BAD_REFRESH_FLAG);                           
+                        } 
+                }
+        }    
 }
