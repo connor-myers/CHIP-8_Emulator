@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <time.h>
 #include "graphics.h"
-#include "main.h"
+#include "settings.h"
 
 /** Constants **/
 
@@ -38,7 +38,7 @@ typedef struct CHIP8 {
 
 /** Functions **/
 
-void CHIP8_init(CHIP8 *chip8);
+void init_CHIP8(CHIP8 *chip8, Settings *userSettings);
 void load_font_data(CHIP8 *chip8);
 
 #endif
