@@ -14,7 +14,8 @@ typedef enum ExitCode
         BAD_REFRESH_FLAG,       // Bad refresh rate provided in args
         BAD_SCALE_FLAG,         // Bad display scaler provided in args
         BAD_ROM,                // Bad rom provided
-        BAD_INSTRUCTION         // An unknown opcode provided in ROM
+        BAD_INSTRUCTION,        // An unknown opcode provided in ROM
+        GRAPHICS_INIT_ERROR     // Problem creating SDL Window
 } ExitCode;
 
 /* Functions */

@@ -9,7 +9,7 @@ all:	chip8 chip8_test clean
 	$(CC) -c -o $@ $< $(OPTS)
 
 chip8: $(SRC_OBJ)
-	$(CC) -o $@ $^ $(OPTS)
+	$(CC) -o $@ $^ $(OPTS) -lSDL2
 
 chip8_test: $(TST_OBJ)
 	$(CC) -o $@ $^ $(OPTS)

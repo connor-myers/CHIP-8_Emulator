@@ -9,10 +9,14 @@ int main(int argc, char **argv)
 
         // extract and parse user args
         Settings userSettings;
-        load_settings(&userSettings, argc - 1, argv + 1);    
+        load_settings(&userSettings, argc - 1, argv + 1);   
 
+        // initialises emulator and display
         CHIP8 chip8;
         init_CHIP8(&chip8, &userSettings);
+
+        SDL_Window *window;
+        init_display(&window, &userSettings);
 
         // load ROM into memory
         load_rom(&chip8, userSettings.rom);
@@ -33,6 +37,10 @@ int main(int argc, char **argv)
                         run_cpu_cycle(&chip8);
 
                         // update graphics
+                        if (chip8.drawFlag)
+                        {
+                                update_display(window, chip8.display, userSettings.displayScale);
+                        }
                         
                         // update timers
                         update_timers(&chip8);
