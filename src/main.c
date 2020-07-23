@@ -2,6 +2,9 @@
 
 int main(int argc, char **argv)
 {
+        // set up signal handler
+        setup_signal_handlers(); 
+
         if (argc < MIN_ARGS)
         {
                 exit_with_msg(BAD_NUM_ARGS);                           
@@ -108,4 +111,31 @@ void load_settings(Settings *settings, int numArgs, char **arguments)
                         } 
                 }
         }    
+}
+
+/*
+        summary:        Sets up signal handler for program
+*/
+void setup_signal_handlers(void)
+{
+        struct sigaction sa;
+        sa.sa_handler = handle_signals;   
+        sa.sa_flags = SA_RESTART;
+        sigaction(SIGTERM, &sa, 0);
+        sigaction(SIGINT, &sa, 0);
+        sigaction(SIGQUIT, &sa, 0);
+}
+
+/*
+        summary:        handle signals
+
+        signal:         The signal to handle
+*/
+void handle_signals(int signal)
+{
+        endwin();   
+        fprintf(stderr, "Exiting due to receiving %s signal\n",
+                        strsignal(signal));
+        fflush(stderr);
+        exit(signal);     
 }
