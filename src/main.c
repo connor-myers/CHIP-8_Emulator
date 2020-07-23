@@ -7,17 +7,41 @@ int main(int argc, char **argv)
                 exit_with_msg(BAD_NUM_ARGS);                           
         }     
 
+        // extract and parse user args
         Settings userSettings;
         load_settings(&userSettings, argc - 1, argv + 1);    
 
         CHIP8 chip8;
         init_CHIP8(&chip8, &userSettings);
 
-        init_debugger(&chip8);
-        update_debugger(&chip8);
+        // load ROM into memory
+        load_rom(&chip8, userSettings.rom);
 
-        getch();
-        endwin();
+        // initialise debugger (if specified in flags)
+        if (userSettings.debugMode)
+        {
+                init_debugger(&chip8);
+        }
+
+        for (;;)
+        {
+                // emulate cycle
+
+                // update graphics
+                
+                // update timers
+
+                // update debugger
+                if (userSettings.debugMode)
+                {
+                        update_debugger(&chip8);
+                }
+        }
+
+        if (userSettings.debugMode)
+        {
+                endwin();
+        }
 }
 
 /*

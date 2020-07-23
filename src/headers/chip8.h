@@ -2,10 +2,12 @@
 #define CHIP8_H
 
 /** Includes **/
+#include <stdio.h>
 #include <stdint.h>
 #include <time.h>
 #include "graphics.h"
 #include "settings.h"
+#include "exit.h"
 
 /** Constants **/
 
@@ -39,6 +41,7 @@ typedef struct CHIP8 {
 /** Functions **/
 
 void init_CHIP8(CHIP8 *chip8, Settings *userSettings);
+void load_rom(CHIP8 *chip8, char *rom);
 void load_font_data(CHIP8 *chip8);
 
 #endif

@@ -8,7 +8,7 @@
 */
 void init_CHIP8(CHIP8 *chip8, Settings *userSettings)
 {
-        // setting seed for random number generation
+        // setting seed for random number generation (required by Cxkk opcode)
         srand(time(NULL));
 
         // Ensuring all memory cells, registers, stack and keyboard values are
@@ -39,6 +39,34 @@ void init_CHIP8(CHIP8 *chip8, Settings *userSettings)
         // Loading user settings into main module
         chip8->userSettings = userSettings;
 }
+
+/*
+        summary:        Loads ROM into CHIP8 memory
+        
+        chip8:          Pointer to CHIP8 struct
+
+        rom:            Path to ROM file
+
+*/
+void load_rom(CHIP8 *chip8, char *rom)
+{
+        //  Opening ROM 
+        FILE *file = fopen(rom, "r");
+        if (file == NULL)
+        {
+                exit_with_msg(BAD_ROM);
+        }
+
+        // Putting ROM into memory
+        int n = 0;
+        int c;
+        while (c = fgetc(file), c != EOF)
+        {
+        chip8->memory[0x200 + n] = (char) c;
+        n++;
+        }        
+}
+
 /*
     summary:    Loads the font data into memory
 
@@ -158,4 +186,3 @@ void load_font_data(CHIP8 *chip8)
     chip8->memory[0x04E] = 0x80;
     chip8->memory[0x04F] = 0x80;
 }
-
