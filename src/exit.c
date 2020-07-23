@@ -9,13 +9,14 @@
 */
 void exit_with_msg(ExitCode code)
 {
-        const char *exit_msgs[5] = {
+        const char *exit_msgs[6] = {
                                     "Program exited normally",
                                     "Program run with invalid number of "\
                                     "arguments",
                                     "Bad refresh rate provided in -r flag",
                                     "Bad display scale provided in -s flag",
                                     "Bad ROM provided"
+                                    "Unknown instruction in ROM"
                                 };
         if (code == 0)
         {

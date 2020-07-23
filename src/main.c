@@ -25,16 +25,24 @@ int main(int argc, char **argv)
 
         for (;;)
         {
-                // emulate cycle
-
-                // update graphics
-                
-                // update timers
-
-                // update debugger
-                if (userSettings.debugMode)
+                time_t currentTime = GET_TIME_IN_MS;
+                if (currentTime - chip8.lastCycleTime
+                        > 1000 / userSettings.clockSpeed)
                 {
-                        update_debugger(&chip8);
+                        // emulate cycle
+                        run_cpu_cycle(&chip8);
+
+                        // update graphics
+                        
+                        // update timers
+                        update_timers(&chip8);
+
+                        // update debugger
+                        if (userSettings.debugMode)
+                        {
+                                update_debugger(&chip8);
+                        }
+                        chip8.lastCycleTime = currentTime;
                 }
         }
 

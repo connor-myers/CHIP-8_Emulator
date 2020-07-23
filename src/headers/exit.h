@@ -12,8 +12,9 @@ typedef enum ExitCode
         NORMAL,                 // Program exited normally
         BAD_NUM_ARGS,           // Program started with invalid number of args
         BAD_REFRESH_FLAG,       // Bad refresh rate provided in args
-        BAD_SCALE_FLAG,          // Bad display scaler provided in args
-        BAD_ROM                 // Bad rom provided
+        BAD_SCALE_FLAG,         // Bad display scaler provided in args
+        BAD_ROM,                // Bad rom provided
+        BAD_INSTRUCTION         // An unknown opcode provided in ROM
 } ExitCode;
 
 /* Functions */
