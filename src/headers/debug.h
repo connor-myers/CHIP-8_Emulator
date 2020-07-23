@@ -15,5 +15,6 @@ void draw_registers_window(CHIP8* chip8);
 void draw_stack_window(CHIP8* chip8);
 void draw_keyboard_window(CHIP8* chip8);
 void draw_rom_window(CHIP8* chip8);
+void draw_spec_window(CHIP8* chip8);
 
 #endif
