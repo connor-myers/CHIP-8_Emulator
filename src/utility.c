@@ -67,3 +67,18 @@ char *get_file_extension(char *fileName)
         
         return NULL;
 }
+
+/*
+        summary:        Gets the nth decimal digit from a number
+
+        number:         The number to get the decimal digit from
+
+        n:              Which digit to get (0 is least sig)
+*/
+uint8_t get_nth_dec_digit(uint16_t number, uint8_t n)
+{
+    while (n--) {
+        number /= 10;
+    }
+    return (number % 10);
+}

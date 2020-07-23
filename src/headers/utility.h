@@ -4,6 +4,7 @@
 /** Includes **/
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 /** Constants **/
 
@@ -25,5 +26,6 @@ typedef enum StringConErr {
 /** Functions **/
 int string_to_int(char *string, StringConErr *error);
 char *get_file_extension(char *fileName);
+uint8_t get_nth_dec_digit(uint16_t number, uint8_t n);
 
 #endif

@@ -32,6 +32,10 @@ int main(int argc, char **argv)
 
         for (;;)
         {
+                process_input(&chip8);
+                // update timers
+                update_timers(&chip8);
+                
                 time_t currentTime = GET_TIME_IN_MS;
                 if (currentTime - chip8.lastCycleTime
                         > 1000 / userSettings.clockSpeed)
@@ -42,12 +46,11 @@ int main(int argc, char **argv)
                         // update graphics
                         if (chip8.drawFlag)
                         {
-                                update_display(window, chip8.display, userSettings.displayScale);
+                                update_display(window, chip8.display,
+                                        userSettings.displayScale);
+                                chip8.drawFlag = 0;
                         }
                         
-                        // update timers
-                        update_timers(&chip8);
-
                         // update debugger
                         if (userSettings.debugMode)
                         {
@@ -133,7 +136,8 @@ void setup_signal_handlers(void)
 */
 void handle_signals(int signal)
 {
-        endwin();   
+        // turn off ncurses 
+        endwin();    
         fprintf(stderr, "Exiting due to receiving %s signal\n",
                         strsignal(signal));
         fflush(stderr);

@@ -12,6 +12,7 @@
 #include "utility.h"
 #include "debug.h"
 #include "settings.h"
+#include "input.h"
 
 /* Constants */
 #define MIN_ARGS            2           // Minimum number of args required for

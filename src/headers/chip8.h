@@ -7,6 +7,7 @@
 #include <time.h>
 #include "graphics.h"
 #include "settings.h"
+#include "utility.h"
 #include "exit.h"
 
 /** Constants **/
@@ -19,11 +20,11 @@
                                         // addresses              
 #define PROGRAM_START   0x200           // The memory address where program
                                         // execution begins at
-#define TIMER_PERIOD    1/60            // Period for the 60Hz timers                                        
+#define TIMER_PERIOD    1000  * 1/60    // Period for the 60Hz timers in ms                                      
 
 /** Macros **/
 #define NTH_HEX_DIGIT(X, N) ((X) >> ((N) * 4)) & 0xF
-#define GET_TIME_IN_MS clock() / (CLOCKS_PER_SEC / 1000)
+#define GET_TIME_IN_MS clock() * 1000 / CLOCKS_PER_SEC
 
 /** Typedefs **/
 

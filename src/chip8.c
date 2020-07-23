@@ -38,6 +38,10 @@ void init_CHIP8(CHIP8 *chip8, Settings *userSettings)
 
         // Loading user settings into main module
         chip8->userSettings = userSettings;
+
+        // setting initial times
+        chip8->lastCycleTime = GET_TIME_IN_MS;
+        chip8->lastTimerUpdate = GET_TIME_IN_MS;
 }
 
 /*
@@ -75,17 +79,17 @@ void load_rom(CHIP8 *chip8, char *rom)
 void update_timers(CHIP8 *chip8)
 {
         time_t currentTime = GET_TIME_IN_MS;
-        if (currentTime - chip8->lastTimerUpdate > TIMER_PERIOD)
+        if ((currentTime - chip8->lastTimerUpdate) > TIMER_PERIOD)
         {
                 if (chip8->delayTimer > 0)
                 {
-                chip8->delayTimer--;
+                        chip8->delayTimer--;
                 }
                 if (chip8->soundTimer > 0)
                 {
                         chip8->soundTimer--;
                 }
-                currentTime = currentTime; 
+                chip8->lastTimerUpdate = currentTime;
         }
 }
 
@@ -494,9 +498,9 @@ void execute_instruction(CHIP8 *chip8, Opcode instruction)
 
                                 case 0x33:
                                 {
-                                        chip8->memory[chip8->i] = NTH_HEX_DIGIT(chip8->registers[x], 2);       
-                                        chip8->memory[chip8->i + 1] = NTH_HEX_DIGIT(chip8->registers[x], 1);    
-                                        chip8->memory[chip8->i + 2] = NTH_HEX_DIGIT(chip8->registers[x], 0); 
+                                        chip8->memory[chip8->i] = get_nth_dec_digit(chip8->registers[x], 2);       
+                                        chip8->memory[chip8->i + 1] = get_nth_dec_digit(chip8->registers[x], 1);    
+                                        chip8->memory[chip8->i + 2] = get_nth_dec_digit(chip8->registers[x], 0); 
                                 }
                                 break;
 
