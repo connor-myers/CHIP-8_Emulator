@@ -14,7 +14,9 @@ The emulator itself was written in C, using the SDL library for graphics and aud
 ## Requirements to Run
 
 -SDL2
+
 -ncurses
+
 -POSIX compliant system (I used getopt.h for args processing)
 
 ## How to Run
@@ -54,6 +56,6 @@ some crazy magic voodoo technique that can reduce this but that would hardly be 
 
 # References
 These were the main resources I used for making the emulator
-http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#2.5
-https://en.wikipedia.org/wiki/CHIP-8
+- http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#2.5
+- https://en.wikipedia.org/wiki/CHIP-8
 
