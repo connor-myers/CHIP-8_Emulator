@@ -1,9 +1,0 @@
-- Make debug window not suck
-
-- Add sound
-
-- Flag parser sucks
-
-- Add unit tests, maybe use a library?
-
-- Create a readme for github
