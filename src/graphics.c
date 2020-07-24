@@ -7,8 +7,6 @@
 */
 void init_display(SDL_Window **window, Settings *userSettings)
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
-
     *window = SDL_CreateWindow(
         "CHIP-8 Emulator",                              // window title
         SDL_WINDOWPOS_UNDEFINED,                        // initial x position

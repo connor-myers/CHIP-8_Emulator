@@ -13,6 +13,7 @@
 #include "debug.h"
 #include "settings.h"
 #include "input.h"
+#include "sound.h"
 
 /* Constants */
 #define MIN_ARGS            2           // Minimum number of args required for
@@ -30,5 +31,6 @@
 void load_settings(Settings *settings, int numArgs, char **arguments);
 void setup_signal_handlers(void);
 void handle_signals(int signal);
+void clean_and_exit();
 
 #endif

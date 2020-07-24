@@ -2,6 +2,10 @@
 
 int main(int argc, char **argv)
 {
+
+        // Make sure SDL can handle audio and video
+        SDL_Init(SDL_INIT_EVERYTHING);
+
         // set up signal handler
         setup_signal_handlers(); 
 
@@ -14,12 +18,14 @@ int main(int argc, char **argv)
         Settings userSettings;
         load_settings(&userSettings, argc - 1, argv + 1);   
 
-        // initialises emulator and display
+        // initialises emulator, display and sound
         CHIP8 chip8;
         init_CHIP8(&chip8, &userSettings);
 
         SDL_Window *window;
         init_display(&window, &userSettings);
+
+        init_sound();
 
         // load ROM into memory
         load_rom(&chip8, userSettings.rom);
@@ -33,6 +39,7 @@ int main(int argc, char **argv)
         for (;;)
         {
                 process_input(&chip8);
+
                 // update timers
                 update_timers(&chip8);
                 
@@ -56,13 +63,17 @@ int main(int argc, char **argv)
                         {
                                 update_debugger(&chip8);
                         }
+
+                        // play sound
+                        if (chip8.soundTimer > 0) 
+                        {
+                                play_audio();
+                        } else {
+                                pause_audio();
+                        }
+
                         chip8.lastCycleTime = currentTime;
                 }
-        }
-
-        if (userSettings.debugMode)
-        {
-                endwin();
         }
 }
 
@@ -138,8 +149,21 @@ void handle_signals(int signal)
 {
         // turn off ncurses 
         endwin();    
+        // free audio resources
+        release_audio_resources();
         fprintf(stderr, "Exiting due to receiving %s signal\n",
                         strsignal(signal));
         fflush(stderr);
         exit(signal);     
+}
+
+/*
+        summary:        Frees any heap allocated resources
+                        And terminates program cleanly
+*/
+void clean_and_exit()
+{
+        endwin();
+        release_audio_resources();
+        exit(0);
 }

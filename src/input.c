@@ -9,8 +9,7 @@ void process_input(CHIP8 *chip8)
                 {
                         case SDL_QUIT:
                         {
-                                endwin(); // turn of ncurses   
-                                exit(0);  // close the game
+                                clean_and_exit();
                         } break;
 
                         case SDL_KEYDOWN:
