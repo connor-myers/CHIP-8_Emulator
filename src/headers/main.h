@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <string.h>
 #include <signal.h>
+#include <unistd.h>
+#include <getopt.h>
 #include "chip8.h"
 #include "exit.h"
 #include "utility.h"

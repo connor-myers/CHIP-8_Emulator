@@ -41,13 +41,11 @@ void init_sound()
 
 void play_audio()
 {
-        //SDL_PauseAudioDevice(*audioDevice, 0); // Start playing
         SDL_PauseAudio(0);
 }
 
 void pause_audio()
 {
-        //SDL_PauseAudioDevice(*audioDevice, 1); // stop playing
         SDL_PauseAudio(1);
 }
 

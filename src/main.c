@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 
         // extract and parse user args
         Settings userSettings;
-        load_settings(&userSettings, argc - 1, argv + 1);   
+        load_settings(&userSettings, argc, argv);   
 
         // initialises emulator, display and sound
         CHIP8 chip8;
@@ -90,41 +90,45 @@ void load_settings(Settings *settings, int numArgs, char **arguments)
         settings->debugMode = false;
         settings->clockSpeed = DEFAULT_CLOCK_SPEED;
         settings->displayScale = DEFAULT_SCALER;
-        settings->rom = arguments[numArgs - 1];
 
+        int opt;
+        while ((opt = getopt(numArgs, arguments, "r:s:d")) != -1) 
+        {
+                switch (opt) 
+                {
+                        case 'r':
+                        {
+                                printf("%s\n", optarg);
+                                settings->clockSpeed = atoi(optarg);
+                                if (settings->clockSpeed <= 0)
+                                {
+                                        exit_with_msg(BAD_REFRESH_FLAG);
+                                }        
+                        }
+                        break;
+                        case 's':
+                        {
+                                settings->displayScale = atoi(optarg);
+                                if (settings->clockSpeed <= 0)
+                                {
+                                        exit_with_msg(BAD_SCALE_FLAG);
+                                }  
+                        }
+                        break;
+                        case 'd':
+                        {
+                                settings->debugMode = true;
+                        }
+                        break;
+                }
+        }
+
+        settings->rom = arguments[optind];
         char *fileExtension = get_file_extension(settings->rom);
         if (fileExtension == NULL || strcmp(fileExtension, ROM_FILE_EXTN) != 0)
         {
                 exit_with_msg(BAD_ROM);
         }
-
-        for (int i = 0; i < numArgs - 1; i++)
-        {
-                if (strcmp(arguments[i], "-d") == 0)
-                {
-                        settings->debugMode = true;
-                }
-                if (arguments[i][0] == '-' && arguments[i][1] == 'r')
-                {
-                        StringConErr error = GOOD;
-                        settings->clockSpeed = 
-                                        string_to_int(arguments[i] + 2, &error);
-                        if (error || settings->clockSpeed <= 0)
-                        {
-                                exit_with_msg(BAD_REFRESH_FLAG);                           
-                        } 
-                }
-                if (arguments[i][0] == '-' && arguments[i][1] == 's')
-                {
-                        StringConErr error = GOOD;
-                        settings->displayScale = 
-                                        string_to_int(arguments[i] + 2, &error);
-                        if (error || settings->displayScale <= 0)
-                        {
-                                exit_with_msg(BAD_REFRESH_FLAG);                           
-                        } 
-                }
-        }    
 }
 
 /*
