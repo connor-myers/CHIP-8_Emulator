@@ -98,7 +98,6 @@ void load_settings(Settings *settings, int numArgs, char **arguments)
                 {
                         case 'r':
                         {
-                                printf("%s\n", optarg);
                                 settings->clockSpeed = atoi(optarg);
                                 if (settings->clockSpeed <= 0)
                                 {
