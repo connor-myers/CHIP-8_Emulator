@@ -27,16 +27,16 @@ Simply clone the repo and make it. To run pong with no fancy settings, input the
 
 ## Flags
 
-# -d
+### -d
 Enables the debugger.
 
-# -s[scale_factor] 
+### -s[scale_factor] 
 This scales the default 64 x 32 display. I generally use 25x scaling.
 
-# -f[refresh_rate]
+### -f[refresh_rate]
 CHIP-8 by default has a clock speed of 500Hz. However, when running on modern hardware and for some games, it can be better to run some games at a faster rate.
 
-# Example
+## Example
 
 For example, my ideal arguments to run pong.
 ```
